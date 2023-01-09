@@ -1,4 +1,4 @@
-package com.szw.commonweal.utils;
+package com.szw.commonweal.component;
 
 import org.springframework.stereotype.Component;
 

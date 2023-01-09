@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 
 @RestController
-public class telephoneCode {
+public class SendCodeController {
     @CrossOrigin
     @RequestMapping("/sendMessage")
     public String phoneCode(HttpServletRequest request) throws Exception {

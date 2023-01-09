@@ -12,8 +12,6 @@ public class LoginHandlerInterceptor implements HandlerInterceptor {
         //step1:登录之后取用户的session
 
         //STEP2:判断session是否为空
-
-
         return false;
     }
 

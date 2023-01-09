@@ -12,7 +12,6 @@ public class TokenDecrypt {
     //签名信息
     private static String signature = "admin";
 
-
     public static String createToken(){
         JwtBuilder jwtBulider= Jwts.builder();
         String jwtToken=jwtBulider
