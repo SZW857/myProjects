@@ -17,7 +17,7 @@ public class token {
         if (username.equals(user.getUserName())&&passwd.equals(user.getPassWord())){
             //添加token
             user.setToken(TokenDecrypt.createToken());
-            System.out.println("这1回："+user.getUserName());
+            System.out.println("这8回："+user.getUserName());
             return user;
         }
         System.out.println("这2回："+user.getUserName());

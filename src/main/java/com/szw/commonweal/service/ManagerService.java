@@ -7,7 +7,7 @@ import java.util.List;
 
 /**
  * 用户身份证检测业务接口
- * @author 史泽文
+ * @author  史泽文
  * */
 public interface ManagerService {
     /**
