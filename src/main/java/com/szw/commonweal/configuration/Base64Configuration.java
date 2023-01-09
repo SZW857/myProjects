@@ -6,7 +6,7 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class Base64Configuration {
-//this is a bean
+//this is a bea
     @Bean
 
     public Base64 base64(){
