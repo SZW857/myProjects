@@ -16,12 +16,12 @@ class CommonWealApplicationTests {
 
     @Test
     void contextLoads() {
-        QueryWrapper<Volunteer> wrapper = new QueryWrapper<>();
-        wrapper.select("passwd")
-                .eq("user_id","szw")
-                .eq("passwd","S751225241");
-        List<Volunteer> list = userMapper.selectList(wrapper);
-        System.out.println(list);
+//        QueryWrapper<Volunteer> wrapper = new QueryWrapper<>();
+//        wrapper.select("passwd")
+//                .eq("user_id","szw")
+//                .eq("passwd","S751225241");
+//        List<Volunteer> list = userMapper.selectList(wrapper);
+//        System.out.println(list);
     }
 
 }

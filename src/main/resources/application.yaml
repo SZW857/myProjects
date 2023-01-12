@@ -1,6 +1,6 @@
 devtools:
   restart:
-   enabled=true:
+    enabled=true:
 server:
   port: 8083
 spring:
@@ -19,11 +19,8 @@ spring:
     username: root
     password: 123456
 
-
-
 #配置日志  打印sql语句
 mybatis-plus:
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
-
 

@@ -1,10 +1,18 @@
 package com.szw.commonweal.entity;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * 统一响应格式类型
  * */
+@Data
+@AllArgsConstructor
 public class ResultInfo<T> implements Serializable {
 
     public static final String EXCEPTION = "exception";
@@ -17,66 +25,25 @@ public class ResultInfo<T> implements Serializable {
 
     public static final String CONTINUE = "continue";
 
+    public static final int INTERCEPT_CODE=102;
+
     private String status = SUCCESS; //处理状态
 
-    private String errorCode = "none";   //错误代码
+    private int Code = 0;   //状态码
 
     private T data;//响应结果
 
-    private String extra = "none";
+    private String extra = "none"; //附加信息
 
     public ResultInfo() {
         this.status = SUCCESS;
-    }
-
-    public ResultInfo(String status, T data){
-        this.status = status;
-        this.data = data;
-    }
-
-    public ResultInfo(String status, String errorCode, T result) {
-        this.status = SUCCESS;
-        this.errorCode = errorCode;
-        this.data = result;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
-    public String getErrorCode() {
-        return errorCode;
-    }
-
-    public void setErrorCode(String errorCode) {
-        this.errorCode = errorCode;
-    }
-
-    public Object getData() {
-        return data;
-    }
-
-    public void setData(T result) {
-        this.data = result;
-    }
-
-    public String getExtra() {
-        return extra;
-    }
-
-    public void setExtra(String extra) {
-        this.extra = extra;
     }
 
     @Override
     public String toString() {
         return "ResultInfo{" +
                 "status='" + status + '\'' +
-                ", errorCode='" + errorCode + '\'' +
+                ", CODE='" + INTERCEPT_CODE + '\'' +
                 ", result=" + data +
                 '}';
     }

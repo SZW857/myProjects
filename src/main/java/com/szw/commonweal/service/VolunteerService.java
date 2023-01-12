@@ -2,6 +2,8 @@ package com.szw.commonweal.service;
 import com.szw.commonweal.entity.ResultInfo;
 import com.szw.commonweal.entity.Volunteer;
 
+import java.util.List;
+
 /**
  * 用户名检测业务接口
  * @author szw
@@ -13,9 +15,14 @@ public interface VolunteerService {
     public ResultInfo<String> userNameCheck(String userName);
 
     /**
-     * 用户登录检测是否通过
+     * 用户登录检测
      * */
-    public ResultInfo<String> checkLogin(String userId, String passwd);
+    public ResultInfo<String> checkLogin(String userId,String passwd);
+
+    /**
+     * 用户信息返回
+     * */
+    public ResultInfo<String> backUserInfo();
 
     /**
      * 用户身份证检测重复或是否存在
@@ -32,10 +39,7 @@ public interface VolunteerService {
      * */
     public ResultInfo<String> userRegister(Volunteer volunteer);
 
-    /**
-     * 添加token
-     * */
-    public ResultInfo<String> addToken(String userId,String passwd);
+
 }
 
 

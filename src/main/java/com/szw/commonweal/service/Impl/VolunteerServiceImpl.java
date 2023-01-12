@@ -1,25 +1,24 @@
 package com.szw.commonweal.service.Impl;
 
 
-import com.baomidou.mybatisplus.core.conditions.Wrapper;
+
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.szw.commonweal.dao.UserMapper;
 import com.szw.commonweal.entity.ResultInfo;
 import com.szw.commonweal.entity.Volunteer;
-
 import com.szw.commonweal.service.VolunteerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
-
 
 @Service
 public class VolunteerServiceImpl  implements VolunteerService {
     @Autowired
     private UserMapper userMapper;
+
     ResultInfo<String> res = new ResultInfo<>();
+    QueryWrapper<Volunteer> wrapper = new QueryWrapper<>();
     /**
      * 用户登录名检测
      * */
@@ -80,24 +79,34 @@ public class VolunteerServiceImpl  implements VolunteerService {
     }
 
     /**
-     * 用户登密码检测
+     * 用户登录
      * */
     @Override
-    public ResultInfo<String> checkLogin(String userId,  String passwd) {
-        QueryWrapper<Volunteer> wrapper = new QueryWrapper<>();
-        wrapper.select("user_id")
-                .eq("user_id",userId)
-                .eq("passwd",passwd);
-        List<Volunteer> list = userMapper.selectList(wrapper);
-        System.out.println("集合为："+list);
-        System.out.println("service层的参数：："+passwd);
-        if (!list.isEmpty()){
-            res.setStatus(ResultInfo.SUCCESS);
-            res.setData("登录通过");
-        }else {
-            res.setStatus(ResultInfo.FAIL);
-            res.setData("登录失败");
-        }
+    public ResultInfo<String> checkLogin(String userId,String passwd) {
+            wrapper.select("user_id")
+                    .eq("user_id",userId)
+                    .eq("passwd",passwd);
+            List<Volunteer> list = userMapper.selectList(wrapper);
+            System.out.println("service层集合为："+list);
+            System.out.println("service层的参数：："+passwd);
+            if (!list.isEmpty()){
+                res.setStatus("success");
+                return res;
+            }else {
+                res.setStatus("fail");
+                return res;
+            }
+    }
+
+    /**
+     * 返回用户登录信息
+     * */
+    @Override
+    public ResultInfo<String> backUserInfo() {
+
+        res.setStatus(ResultInfo.SUCCESS);
+
+        res.setExtra("我是放行后的结果");
         return res;
     }
 
@@ -118,36 +127,5 @@ public class VolunteerServiceImpl  implements VolunteerService {
         }
         return res;
     }
-
-    /**
-     * 添加token
-     * */
-    @Override
-    public ResultInfo<String> addToken(String userId, String passwd) {
-
-
-
-
-
-        return null;
-    }
-
-
-//     if (username.equals(user.getUserName())&&passwd.equals(user.getPassWord())){
-//            //添加token
-//            user.setToken(TokenDecrypt.createToken());
-//            System.out.println("这1回："+user.getUserName());
-//            return user;
-//        }
-//        System.out.println("这2回："+user.getUserName());
-//        return null;
-//    }
-//
-//    @GetMapping("/checkToken")
-//    public Boolean checkToken(HttpServletRequest request){
-//        String token = request.getHeader("token");
-//        return TokenDecrypt.checkToken(token);
-//    }
-
 
 }

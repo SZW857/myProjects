@@ -1,4 +1,5 @@
 package com.szw.commonweal.controller.interceptor;
+
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 import javax.servlet.http.HttpServletRequest;

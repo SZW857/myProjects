@@ -22,5 +22,6 @@ public class Volunteer implements Serializable{
     private String sex;
     private String telephone;
     private String idCardAdmin;
+    private String token;
 
 }
