@@ -71,7 +71,7 @@ public class VolunteerController {
     /**
      * 用户登录页外检测
      * */
-    @PostMapping("/user/test")
+    @PostMapping("/user/tesqt")
     @ResponseBody
     public Map<String, Object> TEST(HttpServletRequest request){
         String token = request.getHeader("token");
@@ -109,7 +109,14 @@ public class VolunteerController {
         return map;
     }
 
-
+    /**
+     * 用于测试的接口
+     * */
+    @ResponseBody
+    @RequestMapping("/measure")
+        public String measure(){
+            return "ok";
+        }
 }
 
 
