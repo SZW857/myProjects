@@ -22,11 +22,4 @@ public class token {
         return null;
     }
 
-    @GetMapping("/checkToken")
-    public Boolean checkToken(HttpServletRequest request){
-        String token = request.getHeader("token");
-        return true;
-    }
-
-
 }

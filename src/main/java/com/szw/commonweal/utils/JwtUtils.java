@@ -12,12 +12,12 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
-public class jwtutils {
+public class JwtUtils {
     private static final String SIGN = "SZW";
 
-    public static String getToken(Map<String, String> map) {
+    public static String setToken(Map<String, String> map) {
         Calendar calendar = Calendar.getInstance();
-        calendar.add(Calendar.SECOND, 35);
+        calendar.add(Calendar.DATE, 1);
 
         JWTCreator.Builder bulider = JWT.create();
         map.forEach((k, v) -> {

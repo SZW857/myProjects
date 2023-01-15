@@ -1,4 +1,4 @@
-package com.szw.commonweal.service.Impl;
+package com.szw.commonweal.entity.service.Impl;
 
 
 
@@ -7,11 +7,17 @@ import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.szw.commonweal.dao.UserMapper;
 import com.szw.commonweal.entity.ResultInfo;
 import com.szw.commonweal.entity.Volunteer;
-import com.szw.commonweal.service.VolunteerService;
+import com.szw.commonweal.entity.service.VolunteerService;
+import com.szw.commonweal.utils.JwtUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import java.util.List;
+import org.springframework.transaction.annotation.Transactional;
 
+import javax.servlet.http.HttpServletRequest;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+@Transactional
 @Service
 public class VolunteerServiceImpl  implements VolunteerService {
     @Autowired
@@ -60,7 +66,27 @@ public class VolunteerServiceImpl  implements VolunteerService {
     }
 
     /**
-     * 用户修改密码
+     * 用户手机号检测
+     * */
+    @Override
+    public ResultInfo<String> telephoneCheck(String telephoneNum) {
+        QueryWrapper<Volunteer> wrapper = new QueryWrapper<>();
+        wrapper.eq("telephone",telephoneNum);
+        List<Volunteer> list = userMapper.selectList(wrapper);
+        System.out.println("集合为："+list);
+        System.out.println("本次的参数：："+telephoneNum);
+        if (!list.isEmpty()){
+            res.setStatus(ResultInfo.SUCCESS);
+            res.setData("手机号已存在");
+        }else {
+            res.setStatus(ResultInfo.FAIL);
+            res.setData("手机号可注册");
+        }
+        return res;
+    }
+
+    /**
+     * 用户修改密码(忘记密码)
      * */
     @Override
     public ResultInfo<String> changePasswd(String passwd,String idCard) {
@@ -79,21 +105,50 @@ public class VolunteerServiceImpl  implements VolunteerService {
     }
 
     /**
-     * 用户登录
+     * 用户修改密码
      * */
     @Override
+    public ResultInfo<String> changPasswd_P(String userId, String passwd) {
+        ResultInfo<String> res = new ResultInfo<>();
+        UpdateWrapper<Volunteer> wrapper = new UpdateWrapper<>();
+        wrapper.set("passwd",passwd).eq("user_id",userId);
+        int update = userMapper.update(null, wrapper);
+        if (update==1){
+            res.setStatus(ResultInfo.SUCCESS);
+            res.setData("密码修改成功");
+        }else {
+            res.setStatus(ResultInfo.FAIL);
+            res.setData("密码修改失败");
+        }
+        return res;
+    }
+
+    /**
+     * 用户登录
+     * */
+
+    @Override
     public ResultInfo<String> checkLogin(String userId,String passwd) {
+        QueryWrapper<Volunteer> wrapper = new QueryWrapper<>();
             wrapper.select("user_id")
-                    .eq("user_id",userId)
                     .eq("passwd",passwd);
             List<Volunteer> list = userMapper.selectList(wrapper);
             System.out.println("service层集合为："+list);
+            System.out.println("service层的参数：："+userId);
             System.out.println("service层的参数：："+passwd);
+        HashMap<String, String> map = new HashMap<>();
+
             if (!list.isEmpty()){
-                res.setStatus("success");
+                map.put("id",userId);
+                map.put("pwd",passwd);
+                String token = JwtUtils.setToken(map);
+                res.setStatus(ResultInfo.SUCCESS);
+                res.setData(token);
+                res.setExtra(userId);
                 return res;
             }else {
-                res.setStatus("fail");
+                res.setStatus(ResultInfo.FAIL);
+                res.setData("登陆失败");
                 return res;
             }
     }
@@ -126,6 +181,17 @@ public class VolunteerServiceImpl  implements VolunteerService {
             res.setData("注册失败");
         }
         return res;
+    }
+
+    /**
+     * 个人页面展示
+     * */
+    @Override
+    public List PersonInfo(String userId) {
+        QueryWrapper<Volunteer> wrapper = new QueryWrapper<>();
+        wrapper.select("age","telephone","email","address","sex").eq("user_id",userId);
+        List<Map<String, Object>> list = userMapper.selectMaps(wrapper);
+        return list;
     }
 
 }

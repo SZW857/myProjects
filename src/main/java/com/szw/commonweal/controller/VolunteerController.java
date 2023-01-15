@@ -2,60 +2,55 @@ package com.szw.commonweal.controller;
 
 import com.szw.commonweal.entity.ResultInfo;
 import com.szw.commonweal.entity.Volunteer;
-import com.szw.commonweal.service.VolunteerService;
-import com.szw.commonweal.utils.jwtutils;
+import com.szw.commonweal.entity.service.VolunteerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 
 @Controller
+@RequestMapping("/user")
 public class VolunteerController {
     @Autowired
     private VolunteerService volunteerService;
 
     /**
-     * 用户名检测
+     * 用户身份证号检测 (DONE)
      * */
-    @RequestMapping("/usernamecheck")
+    @CrossOrigin()
+    @RequestMapping("/idCardCheck")
     @ResponseBody
-    public String userId(@RequestParam("userId")String userId){
-        System.out.println(userId);
-        return "volunteerService.userNameCheck(userId)";
-    }
-
-    /**
-     * 用户登录检测
-     * */
-    @ResponseBody
-    @RequestMapping("/login")
-    public ResultInfo<String> logIn(){
-        return volunteerService.backUserInfo();
-    }
-
-
-    /**
-     * 用户身份证号检测
-     * */
-    @ResponseBody
-    @RequestMapping("/idcardcheck/{idcard}")
-    public ResultInfo<String> idCheck(@PathVariable("idcard")String idCard){
-        System.out.println(idCard);
+    public ResultInfo<String> idCheck(HttpServletRequest request){
+        String idCard=request.getParameter("idCard");
         return volunteerService.idCheck(idCard);
     }
 
     /**
-     * 用户修改密码
+     * 手机号检测 (DONE)
      * */
+    @CrossOrigin()
+    @RequestMapping("/telephoneCheck")
     @ResponseBody
-    @RequestMapping("/changpasswd")
-    public ResultInfo<String> changePasswd(Volunteer volunteer){
-        System.out.println("前端穿的密码"+volunteer.getPasswd());
-        return volunteerService.changePasswd(volunteer.getPasswd(),volunteer.getIdCard());
+    public ResultInfo<String> telephoneCheck(HttpServletRequest request){
+        String telephoneNum=request.getParameter("telephoneNum");
+        return volunteerService.telephoneCheck(telephoneNum);
+    }
+
+    /**
+     * 用户名检测 (DONE)
+     * */
+    @CrossOrigin
+    @RequestMapping("/NameCheck")
+    @ResponseBody
+    public ResultInfo<String> userId(HttpServletRequest request){
+        String userId=request.getParameter("userId");
+        System.out.println("史泽文"+userId);
+        return volunteerService.userNameCheck(userId);
+
     }
 
     /**
@@ -69,48 +64,38 @@ public class VolunteerController {
     }
 
     /**
-     * 用户登录页外检测
+     * 个人页面展示
      * */
-    @PostMapping("/user/tesqt")
+    @CrossOrigin
+    @RequestMapping("/selectPersonInfo")
     @ResponseBody
-    public Map<String, Object> TEST(HttpServletRequest request){
-        String token = request.getHeader("token");
-        Map<String, Object> map = new HashMap<>();
-        //处理逻辑
-        System.out.println("用户名"+ jwtutils.getVerify(token).getClaim("userId").asString());
-        System.out.println("密码"+jwtutils.getVerify(token).getClaim("passwd").asString());
-        map.put("state",true);
-        map.put("msg","testController:请求成功");
-        return map;
+    public List personalPage(@RequestParam("userId")String userId){
+        return volunteerService.PersonInfo(userId);
     }
 
     /**
-     * 用户登录页
+     * 用户登录页(DONE)
      * */
+    @CrossOrigin
     @ResponseBody
-    @RequestMapping("/user/login")
-    public HashMap<String, String> AA(@RequestParam("NAME") String NAME, @RequestParam("PASSWD") String PASSWD){
-        HashMap<String, String> map = new HashMap<>();
-        if (NAME.equals("szw")&&PASSWD.equals("S751225241")){
-            System.out.println("登陆成功"+NAME);
-            map.put("id",NAME);
-            map.put("pwd",PASSWD);
-
-            String token = jwtutils.getToken(map);
-
-            map.put("msg","登录成功");
-            map.put("state","ok");
-            map.put("token",token);
-        }else {
-            System.out.println("登陆失败");
-            map.put("msg","登录失败");
-            map.put("state","false");
-        }
-        return map;
+    @RequestMapping("/login")
+    public ResultInfo<String> Login(@RequestParam("userId") String userId, @RequestParam("passwd") String passwd){
+        return  volunteerService.checkLogin(userId,passwd);
     }
 
     /**
-     * 用于测试的接口
+     * 用户修改密码 (DONE)
+     * */
+    @CrossOrigin
+    @ResponseBody
+    @RequestMapping("/changePasswd_P")
+    public ResultInfo<String> changePasswd_P(@RequestParam("userId")String userId,@RequestParam("passwd")String passwd){
+        System.out.println("前端穿的密码"+passwd);
+        return volunteerService.changPasswd_P(userId,passwd);
+    }
+
+    /**
+     * 用于测试的接口 (DONE)
      * */
     @ResponseBody
     @RequestMapping("/measure")

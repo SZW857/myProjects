@@ -1,8 +1,10 @@
-package com.szw.commonweal.service;
+package com.szw.commonweal.entity.service;
 import com.szw.commonweal.entity.ResultInfo;
 import com.szw.commonweal.entity.Volunteer;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 用户名检测业务接口
@@ -30,14 +32,31 @@ public interface VolunteerService {
     public ResultInfo<String> idCheck(String idCard);
 
     /**
-     * 用户修改密码
+     * 用户身份证检测重复或是否存在
+     * */
+    public ResultInfo<String> telephoneCheck(String telephoneNum);
+
+    /**
+     * 用户修改密码(忘记密码)
      * */
     public ResultInfo<String> changePasswd(String passwd,String idCard);
+
+    /**
+     * 用户修改密码
+     * */
+    public ResultInfo<String> changPasswd_P(String userId,String passwd);
 
     /**
      * 用户注册
      * */
     public ResultInfo<String> userRegister(Volunteer volunteer);
+
+    /**
+     * 用户注册
+     * */
+    public List PersonInfo(String userId);
+
+
 
 
 }

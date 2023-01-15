@@ -38,7 +38,6 @@ public class DeCode {
         for (int i = 0; i < arr.length; i++) {
             number = number * 10 + arr[i];
         }
-        System.out.printf("解密后的密码:"+number);
         return number;
     }
 

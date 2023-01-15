@@ -17,11 +17,11 @@ public class Volunteer implements Serializable{
     private String passwd;
     private String address;
     private int age;
+    private int verify;
     private int signNum;
     private String idCard;
     private String sex;
     private String telephone;
+    private String email;
     private String idCardAdmin;
-    private String token;
-
 }
