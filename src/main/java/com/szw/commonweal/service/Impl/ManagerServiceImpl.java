@@ -1,13 +1,12 @@
-package com.szw.commonweal.entity.service.Impl;
+package com.szw.commonweal.service.Impl;
 
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.szw.commonweal.dao.MangerMapper;
 import com.szw.commonweal.entity.Manager;
-import com.szw.commonweal.entity.ResultInfo;
 
 
-import com.szw.commonweal.entity.service.ManagerService;
+import com.szw.commonweal.service.ManagerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

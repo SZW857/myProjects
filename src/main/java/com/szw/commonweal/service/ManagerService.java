@@ -1,4 +1,4 @@
-package com.szw.commonweal.entity.service;
+package com.szw.commonweal.service;
 
 import com.szw.commonweal.entity.Manager;
 import com.szw.commonweal.entity.Volunteer;
@@ -14,5 +14,7 @@ public interface ManagerService {
      * 用户身份证检测重复或是否存在
      * */
     public List<Object> getManagerInfo();
+
+
 
 }

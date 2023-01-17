@@ -1,7 +1,7 @@
 package com.szw.commonweal.controller;
 
 import com.szw.commonweal.entity.ResultInfo;
-import com.szw.commonweal.entity.service.VolunteerService;
+import com.szw.commonweal.service.VolunteerService;
 import com.szw.commonweal.utils.DeCode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;

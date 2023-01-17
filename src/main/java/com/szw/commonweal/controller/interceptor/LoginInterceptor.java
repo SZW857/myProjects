@@ -3,9 +3,9 @@ package com.szw.commonweal.controller.interceptor;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.szw.commonweal.utils.JwtUtils;
+import com.szw.commonweal.utils.ResponseMessage;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
-import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -21,23 +21,24 @@ public class LoginInterceptor implements HandlerInterceptor {
         //拦截
             String token=request.getParameter("token");
             System.out.println("史泽文token为"+token);
+            System.out.println("uhg"+request.getParameter("adminId"));
             Map<String, String> map = JwtUtils.verify(token);
             String value = map.get("msg");
             if (value=="无效签名"){
                 map.put("state","false");
-                resMassage(response,map);
+                ResponseMessage.resMassage(response,map);
                 return false;
             }else if (value=="TOKEN过期"){
                 map.put("state","false");
-                resMassage(response,map);
+                ResponseMessage.resMassage(response,map);
                 return false;
             }else if (value=="算法异常"){
                 map.put("state","false");
-                resMassage(response,map);
+                ResponseMessage.resMassage(response,map);
                 return false;
             }else if (value=="token异常"){
                 map.put("state","false");
-                resMassage(response,map);
+                ResponseMessage.resMassage(response,map);
                 return false;
             }else {
                 return true;
@@ -45,11 +46,7 @@ public class LoginInterceptor implements HandlerInterceptor {
         }
     }
 
-    private void resMassage(HttpServletResponse response,Map map) throws Exception{
-            String json = new ObjectMapper().writeValueAsString(map);
-            response.setContentType("application/json;charset=UTF-8");
-            response.getWriter().println(json);
-    }
+
     //放行的路径
     private boolean Accessible(HttpServletRequest request){
         return request.getRequestURI().equals("/user/login") ||             //登录
@@ -57,10 +54,12 @@ public class LoginInterceptor implements HandlerInterceptor {
                 request.getRequestURI().equals("/user/sendMessage")||       //发送短信
                 request.getRequestURI().contains("/user/changPasswd_F")||   //修改密码(忘记密码)
                 request.getRequestURI().contains("/user/NameCheck")||       //用户名检测
-                request.getRequestURI().contains("/user/telephoneCheck")||  //手机号检测
+                request.getRequestURI().equals("/user/telephoneCheck")||  //手机号检测
                 request.getRequestURI().equals("/user/idCardCheck")||       //身份证检测
                 request.getRequestURI().equals("/admin/selectAdminInfo")||   //获取管理员
-                request.getRequestURI().equals("/user/XXX")||
+                request.getRequestURI().equals("/admin/getNewsInfo")||       //获取社区新闻
+                request.getRequestURI().contains("/news/publishNews")||
+                request.getRequestURI().contains("/")||
                 request.getRequestURI().contains("/user/measure");          //测试接口
 
     }

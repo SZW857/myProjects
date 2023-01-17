@@ -1,4 +1,4 @@
-package com.szw.commonweal.entity.service;
+package com.szw.commonweal.service;
 import com.szw.commonweal.entity.ResultInfo;
 import com.szw.commonweal.entity.Volunteer;
 

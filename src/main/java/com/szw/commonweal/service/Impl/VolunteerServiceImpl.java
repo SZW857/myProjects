@@ -1,4 +1,4 @@
-package com.szw.commonweal.entity.service.Impl;
+package com.szw.commonweal.service.Impl;
 
 
 
@@ -7,13 +7,12 @@ import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.szw.commonweal.dao.UserMapper;
 import com.szw.commonweal.entity.ResultInfo;
 import com.szw.commonweal.entity.Volunteer;
-import com.szw.commonweal.entity.service.VolunteerService;
+import com.szw.commonweal.service.VolunteerService;
 import com.szw.commonweal.utils.JwtUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;

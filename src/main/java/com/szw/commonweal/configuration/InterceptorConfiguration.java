@@ -49,6 +49,5 @@ public class InterceptorConfiguration implements WebMvcConfigurer {
         registry.addInterceptor(crosInterceptor);
         registry.addInterceptor(loggerInterceptor);
         registry.addInterceptor(loginInterceptor);
-
     }
 }

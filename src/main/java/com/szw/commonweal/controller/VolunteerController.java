@@ -2,14 +2,13 @@ package com.szw.commonweal.controller;
 
 import com.szw.commonweal.entity.ResultInfo;
 import com.szw.commonweal.entity.Volunteer;
-import com.szw.commonweal.entity.service.VolunteerService;
+import com.szw.commonweal.service.VolunteerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
-import java.util.Map;
 
 
 @Controller
