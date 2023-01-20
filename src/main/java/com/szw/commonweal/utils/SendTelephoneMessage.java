@@ -11,7 +11,7 @@ import com.aliyun.teautil.models.RuntimeOptions;
 // This file is auto-generated, don't edit it. Thanks.
 
 
-public class SendMessage {
+public class SendTelephoneMessage {
 
     /**
      * 使用AK&SK初始化账号Client
@@ -36,11 +36,10 @@ public class SendMessage {
         return new Client(config);
     }
 
-    public static  String send(String setPhoneNumbers,int code) throws Exception {
-
-
+    public static  String send(String setPhoneNumbers,String code) throws Exception {
+        if (code!=""){
         // 工程代码泄露可能会导致AccessKey泄露，并威胁账号下所有资源的安全性。以下代码示例仅供参考，建议使用更安全的 STS 方式，更多鉴权访问方式请参见：https://help.aliyun.com/document_detail/378657.html
-        Client client = SendMessage.createClient();
+        Client client = SendTelephoneMessage.createClient();
         SendSmsRequest sendSmsRequest = new SendSmsRequest()
                 .setSignName("史泽文的个人网站")
                 .setTemplateCode("SMS_266995134")
@@ -57,7 +56,9 @@ public class SendMessage {
             TeaException error = new TeaException(_error.getMessage(), _error);
             // 如有需要，请打印 error
             Common.assertAsString(error.message);
-
+       } finally {
+            EphemeralCode.TELEPHONEREALCODE="";
+        }
     }
         return "信息已发送到手机";
 }

@@ -1,50 +1,43 @@
 package com.szw.commonweal.controller;
 
 import com.szw.commonweal.entity.ResultInfo;
+import com.szw.commonweal.service.SendEmailService;
 import com.szw.commonweal.service.VolunteerService;
-import com.szw.commonweal.utils.DeCode;
+import com.szw.commonweal.utils.Base64;
+import com.szw.commonweal.utils.EphemeralCode;
+import com.szw.commonweal.utils.SendTelephoneMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import javax.websocket.server.PathParam;
-
 @RestController
 public class SendCodeController {
-    public static int VERIFY_CODE;
+
     @Autowired
-    private VolunteerService volunteerService;
+    private SendEmailService emailService;
     /**
-     * 发送短信接口
+     * 发送短信接口(DONE)
      * */
     @CrossOrigin
-    @RequestMapping("/user/sendMessage")
-    public String phoneCode(@RequestParam("falseCode")String falseCode,@RequestParam("telephoneNum")String telephoneNum) throws Exception {
-        VERIFY_CODE=DeCode.deCode(falseCode);
+    @RequestMapping("/sendMessage")
+    public String phoneCode(@RequestParam("falseCode")String falseCode,
+                            @RequestParam("telephone")String telephoneNum)throws Exception{
+        EphemeralCode.TELEPHONEREALCODE=Base64.unLock(falseCode);
         System.out.println("手机号"+telephoneNum);
         System.out.println("验证码"+falseCode);
-        System.out.println("解密后："+VERIFY_CODE);
+        System.out.println("解密后："+EphemeralCode.TELEPHONEREALCODE);
         //解码前端传来的加密参数，并返回
-//        return  SendMessage.send(telephoneNum,VERIFY_CODE);
-        return "";
+//        return SendTelephoneMessage.send(telephoneNum,EphemeralCode.TELEPHONEREALCODE);
+        return null;
     }
 
     /**
-     * 用户修改密码(忘记密码)
+     * 发送QQ邮箱接口(DONE)
      * */
     @CrossOrigin
-    @RequestMapping("/user/changPasswd_F")
-    public ResultInfo<String> changePasswd(@RequestParam("idCard")String idCard, @RequestParam("passwd")String passwd, @PathParam("valueCode")String valueCode){
-        ResultInfo<String> resultInfo = new ResultInfo<>();
-        System.out.println("XIU手机号"+idCard);
-        System.out.println("XIU前端穿的密码"+passwd);
-        System.out.println("XIU："+VERIFY_CODE);
-        int i= Integer.parseInt(valueCode);
-        if (i==VERIFY_CODE){
-            return volunteerService.changePasswd(passwd,idCard);
-        }else {
-            resultInfo.setData("修改密码失败");
-            resultInfo.setStatus(ResultInfo.FAIL);
-            return resultInfo;
-        }
+    @RequestMapping("/sendEmail")
+    public ResultInfo<String>AAA(@RequestParam("falseCode")String falseCode,@RequestParam("email") String email){
+        return emailService.createRegisterEmailCode(EphemeralCode.EMAILREALCODE=Base64.unLock(falseCode),email);
     }
+
+
 }

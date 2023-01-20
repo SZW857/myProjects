@@ -8,7 +8,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.websocket.server.PathParam;
 import java.util.List;
+
 
 
 @Controller
@@ -24,8 +26,7 @@ public class VolunteerController {
     @RequestMapping("/idCardCheck")
     @ResponseBody
     public ResultInfo<String> idCheck(HttpServletRequest request){
-        String idCard=request.getParameter("idCard");
-        return volunteerService.idCheck(idCard);
+        return volunteerService.idCheck(request.getParameter("idCard"));
     }
 
     /**
@@ -35,8 +36,7 @@ public class VolunteerController {
     @RequestMapping("/telephoneCheck")
     @ResponseBody
     public ResultInfo<String> telephoneCheck(HttpServletRequest request){
-        String telephoneNum=request.getParameter("telephoneNum");
-        return volunteerService.telephoneCheck(telephoneNum);
+        return volunteerService.telephoneCheck(request.getParameter("telephoneNum"));
     }
 
     /**
@@ -46,24 +46,32 @@ public class VolunteerController {
     @RequestMapping("/NameCheck")
     @ResponseBody
     public ResultInfo<String> userId(HttpServletRequest request){
-        String userId=request.getParameter("userId");
-        System.out.println("史泽文"+userId);
-        return volunteerService.userNameCheck(userId);
+        return volunteerService.userNameCheck(request.getParameter("userId"));
 
     }
 
     /**
-     * 用户注册
+     * QQ邮箱检测 (DONE)
      * */
+    @CrossOrigin
+    @RequestMapping("/emailCheck")
     @ResponseBody
+    public ResultInfo<String> emailCheck(HttpServletRequest request){
+        return volunteerService.emailCheck(request.getParameter("email"));
+    }
+
+    /**
+     * 用户注册(DONE)
+     * */
+    @CrossOrigin
     @RequestMapping("/register")
+    @ResponseBody
     public ResultInfo<String> Register(Volunteer volunteer){
-        System.out.println("前端穿的密码"+volunteer.getPasswd());
         return volunteerService.userRegister(volunteer);
     }
 
     /**
-     * 个人页面展示
+     * 个人页面展示(DONE)
      * */
     @CrossOrigin
     @RequestMapping("/selectPersonInfo")
@@ -73,7 +81,7 @@ public class VolunteerController {
     }
 
     /**
-     * 用户登录页(DONE)
+     * 用户登录(DONE)
      * */
     @CrossOrigin
     @ResponseBody
@@ -89,8 +97,50 @@ public class VolunteerController {
     @ResponseBody
     @RequestMapping("/changePasswd_P")
     public ResultInfo<String> changePasswd_P(@RequestParam("userId")String userId,@RequestParam("passwd")String passwd){
-        System.out.println("前端穿的密码"+passwd);
         return volunteerService.changPasswd_P(userId,passwd);
+    }
+
+    /**
+     * 用户修改密码(忘记密码)
+     * */
+    @CrossOrigin
+    @RequestMapping("/changPasswd_F")
+    public ResultInfo<String> changePasswd(@RequestParam("idCard")String idCard,
+                                           @RequestParam("passwd")String passwd,
+                                           @PathParam("falseCode")String falseCode) {
+        return volunteerService.changePasswd(idCard,passwd,falseCode);
+    }
+
+    /**
+     * 用户修改QQ邮箱(DONE)
+     * */
+    @CrossOrigin
+    @ResponseBody
+    @RequestMapping("/changEmail")
+    public ResultInfo<String> changeEmail(@RequestParam("userId")String userId,@RequestParam("email")String email){
+        return volunteerService.changEmail(userId,email);
+    }
+
+    /**
+     * 用户修改手机号 **(DONE)
+     * */
+    @CrossOrigin
+    @RequestMapping("/changTelephone")
+    public ResultInfo<String> changeTelephone(@RequestParam("userId")String userId, @RequestParam("telephone")String telephone){
+        return volunteerService.changTelephone(userId,telephone);
+    }
+
+    /**
+     * 用户保存个人信息*(DONE)
+     * */
+    @CrossOrigin
+    @ResponseBody
+    @RequestMapping("/saveInformation")
+    public ResultInfo<String> changeTelephone(@RequestParam("userId")String userId,
+                                              @RequestParam("address")String address,
+                                              @RequestParam("sex")String sex,
+                                              @RequestParam("age") int age){
+        return volunteerService.saveInformation(userId,address,sex,age);
     }
 
     /**

@@ -12,19 +12,19 @@ import java.util.Map;
  * */
 public interface VolunteerService {
     /**
-     * 用户名检测重复或是否存在
+     * 用户名检测是否存在
      * */
     public ResultInfo<String> userNameCheck(String userName);
+
+    /**
+     * Email检测是否存在
+     * */
+    public ResultInfo<String> emailCheck(String email);
 
     /**
      * 用户登录检测
      * */
     public ResultInfo<String> checkLogin(String userId,String passwd);
-
-    /**
-     * 用户信息返回
-     * */
-    public ResultInfo<String> backUserInfo();
 
     /**
      * 用户身份证检测重复或是否存在
@@ -39,12 +39,27 @@ public interface VolunteerService {
     /**
      * 用户修改密码(忘记密码)
      * */
-    public ResultInfo<String> changePasswd(String passwd,String idCard);
+    public ResultInfo<String> changePasswd(String idCard,String passwd,String falseCode);
 
     /**
-     * 用户修改密码
+     * 用户修改密码*
      * */
     public ResultInfo<String> changPasswd_P(String userId,String passwd);
+
+    /**
+     * 用户修改QQ邮箱*
+     * */
+    public ResultInfo<String> changEmail(String userId,String email);
+
+    /**
+     * 用户修改手机号*
+     * */
+    public ResultInfo<String> changTelephone(String userId,String telephone);
+
+    /**
+     * 用户保存个人信息*
+     * */
+    public ResultInfo<String> saveInformation(String userId,String address,String sex,int age);
 
     /**
      * 用户注册
@@ -52,7 +67,7 @@ public interface VolunteerService {
     public ResultInfo<String> userRegister(Volunteer volunteer);
 
     /**
-     * 用户注册
+     * 个人页面展示*
      * */
     public List PersonInfo(String userId);
 

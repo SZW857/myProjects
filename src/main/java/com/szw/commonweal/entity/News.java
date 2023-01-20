@@ -14,11 +14,12 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 public class News {
-    @TableId(value = "newsId",type = IdType.AUTO)
+    @TableId(type = IdType.AUTO)
     private Integer newsId;
     private String title;
     private String content;
     private String type;
-    private Date date;
+    @TableField(fill = FieldFill.INSERT)
+    private Date createTime;
     private String adminId;
 }

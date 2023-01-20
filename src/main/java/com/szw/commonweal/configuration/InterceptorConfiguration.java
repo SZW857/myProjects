@@ -12,9 +12,13 @@ import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 @Configuration
 public class InterceptorConfiguration implements WebMvcConfigurer {
-
+private static final List<String> EXCLUDE_PATH= Arrays.asList("/","/*.html","/css/**","/js/**","/picture/**");
 
 
     @Autowired
@@ -48,6 +52,7 @@ public class InterceptorConfiguration implements WebMvcConfigurer {
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(crosInterceptor);
         registry.addInterceptor(loggerInterceptor);
-        registry.addInterceptor(loginInterceptor);
+        registry.addInterceptor(loginInterceptor)
+                .excludePathPatterns(EXCLUDE_PATH);
     }
 }

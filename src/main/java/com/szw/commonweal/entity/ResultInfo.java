@@ -35,6 +35,8 @@ public class ResultInfo<T> implements Serializable {
 
     private String extra = "none"; //附加信息
 
+    private String ID = "NONE";
+
     public ResultInfo() {
         this.status = SUCCESS;
     }
