@@ -3,13 +3,13 @@ package com.szw.commonweal.service.Impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
+import com.szw.commonweal.dao.DistinctMapper;
 import com.szw.commonweal.dao.GetVolunteerMapper;
 import com.szw.commonweal.dao.MangerMapper;
-import com.szw.commonweal.dao.VolunteerMapper;
 import com.szw.commonweal.entity.Manager;
 import com.szw.commonweal.entity.ResultInfo;
-import com.szw.commonweal.entity.View.GetVolunteers;
-import com.szw.commonweal.entity.Volunteer;
+import com.szw.commonweal.entity.views.EmailAndTelephone;
+import com.szw.commonweal.entity.views.GetVolunteers;
 import com.szw.commonweal.service.ManagerService;
 import com.szw.commonweal.utils.Base64;
 import com.szw.commonweal.utils.JwtUtils;
@@ -32,6 +32,8 @@ public class ManagerServiceImpl implements ManagerService {
     private MangerMapper mangerMapper;
     @Autowired
     private GetVolunteerMapper getVolunteerMapper;
+    @Autowired
+    private DistinctMapper distinctMapper;
 
 
 
@@ -63,6 +65,23 @@ public class ManagerServiceImpl implements ManagerService {
         }else {
             res.setStatus(ResultInfo.FAIL);
             res.setData("审核不通过");
+        }
+        return res;
+    }
+
+    /**
+     * 自动清除不合法的志愿者
+     * */
+    @Override
+    public ResultInfo<String> cleanVolunteers(String userId) {
+        ResultInfo<String> res = new ResultInfo<>();
+        QueryWrapper<GetVolunteers> wrapper = new QueryWrapper<>();
+        wrapper.eq("user_id",userId);
+        int i = getVolunteerMapper.delete(wrapper);
+        if (i==1){
+            res.setStatus(ResultInfo.SUCCESS);
+        }else{
+            res.setStatus(ResultInfo.FAIL);
         }
         return res;
     }
@@ -163,6 +182,63 @@ public class ManagerServiceImpl implements ManagerService {
     }
 
     /**
+     * 用户修改邮箱*(DONE)
+     * */
+    @Override
+    public ResultInfo<String> changEmail(String adminName, String email) {
+        ResultInfo<String> res = new ResultInfo<>();
+        QueryWrapper<EmailAndTelephone> distinct = new QueryWrapper<>();
+        distinct.select("email").eq("email",email);
+        List<EmailAndTelephone> list = distinctMapper.selectList(distinct);
+        if (!list.isEmpty()){
+            res.setStatus(ResultInfo.FAIL);
+            res.setData("邮箱已经存在");
+            return res;
+        }else {
+            UpdateWrapper<Manager> wrapper = new UpdateWrapper<>();
+            wrapper.set("email",email).eq("admin_name",adminName);
+            int update = mangerMapper.update(null, wrapper);
+            if (update==1){
+                res.setStatus(ResultInfo.SUCCESS);
+                res.setData("邮箱修改成功");
+            }else {
+                res.setStatus(ResultInfo.FAIL);
+                res.setData("邮箱修改失败");
+            }
+            return res;
+        }
+
+    }
+
+    /**
+     * 用户修改手机号(DONE)*
+     * */
+    @Override
+    @Transactional
+    public ResultInfo<String> changTelephone(String adminName, String telephone) {
+        ResultInfo<String> res = new ResultInfo<>();
+        QueryWrapper<EmailAndTelephone> wrapper1 = new QueryWrapper<>();
+        wrapper1.select("telephone").eq("telephone",telephone);
+        List<EmailAndTelephone> list = distinctMapper.selectList(wrapper1);
+        if (!list.isEmpty()){
+            res.setStatus(ResultInfo.FAIL);
+            res.setData("该手机号已经注册");
+        }else {
+            UpdateWrapper<Manager> wrapper = new UpdateWrapper<>();
+            wrapper.eq("admin_name",adminName).set("telephone",telephone);
+            int update = mangerMapper.update(null,wrapper);
+            if (update==1){
+                res.setStatus(ResultInfo.SUCCESS);
+                res.setData("手机号修改成功");
+            }else {
+                res.setStatus(ResultInfo.FAIL);
+                res.setData("手机号修改失败");
+            }
+        }
+        return res;
+    }
+
+    /**
      * 用户修改密码(忘记密码)(DONE)
      * */
     @Override
@@ -204,6 +280,18 @@ public class ManagerServiceImpl implements ManagerService {
             res.setData("修改密码失败,未通过发送校验码非法路径操作");
         }
            return res;
+    }
+
+    /**
+     * 管理员个人页面展示(DONE)*
+     *
+     * @return*/
+    @Override
+    public List<Map<String, Object>> getOneManagerInfo(String adminId) {
+        QueryWrapper<Manager> wrapper = new QueryWrapper<>();
+        wrapper.select("telephone","email").eq("admin_name",adminId);
+        List<Map<String, Object>> maps = mangerMapper.selectMaps(wrapper);
+        return maps;
     }
 
     /**

@@ -6,13 +6,11 @@ import com.szw.commonweal.controller.interceptor.LoginInterceptor;
 import com.szw.commonweal.controller.interceptor.LoggerInterceptor;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -38,6 +36,8 @@ private static final List<String> EXCLUDE_PATH= Arrays.asList(
                 .allowCredentials(true)
                 //设置放行哪些原始域   SpringBoot2.4.4下低版本使用.allowedOrigins("*")
                 .allowedOriginPatterns("*")
+                .allowedMethods("GET","POST")
+                .maxAge(3600)
                 //放行哪些请求方式
                 .allowedMethods("*") //或者放行全部
                 //放行哪些原始请求头部信息

@@ -1,4 +1,4 @@
-package com.szw.commonweal.entity.View;
+package com.szw.commonweal.entity.views;
 
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.AllArgsConstructor;
@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @TableName("emails_and_telephone")
 public class EmailAndTelephone {
-  String email;
-  String telephone;
+  private  String email;
+  private  String telephone;
+  private  String idCard;
 }

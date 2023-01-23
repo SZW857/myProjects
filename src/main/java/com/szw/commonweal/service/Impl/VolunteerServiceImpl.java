@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.szw.commonweal.dao.DistinctMapper;
 import com.szw.commonweal.dao.VolunteerMapper;
-import com.szw.commonweal.entity.View.EmailAndTelephone;
+import com.szw.commonweal.entity.views.EmailAndTelephone;
 import com.szw.commonweal.entity.ResultInfo;
 import com.szw.commonweal.entity.Volunteer;
 import com.szw.commonweal.service.VolunteerService;
@@ -48,7 +48,7 @@ public class VolunteerServiceImpl  implements VolunteerService {
             res.setData("该Email已存在");
         }else {
             res.setStatus(ResultInfo.FAIL);
-            res.setData("该Email不存在");
+            res.setData("该Email可用");
         }
         return res;
     }

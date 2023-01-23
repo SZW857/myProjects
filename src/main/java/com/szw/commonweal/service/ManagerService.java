@@ -3,6 +3,7 @@ package com.szw.commonweal.service;
 import com.szw.commonweal.entity.ResultInfo;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 用户身份证检测业务接口
@@ -35,6 +36,12 @@ public interface ManagerService {
     public ResultInfo<String> checkEmailLogin(String adminId, String passwd);
 
     /**
+     * 管理员个人页面展示(DONE)*
+     *
+     * @return*/
+    public List<Map<String, Object>> getOneManagerInfo(String userId);
+
+    /**
      * 管理员身份证检测重复或是否存在
      * */
     public ResultInfo<String> idCheck(String idCard);
@@ -50,10 +57,25 @@ public interface ManagerService {
     public ResultInfo<String> changePasswd(String adminId,String passwd);
 
     /**
+     * 管理员修改QQ邮箱*
+     * */
+    public ResultInfo<String> changEmail(String adminName,String email);
+
+    /**
+     * 管理员修改手机号*
+     * */
+    public ResultInfo<String> changTelephone(String adminName,String telephone);
+
+    /**
      * 管理员审核注册的志愿者*
      * */
     public ResultInfo<String> verifyVolunteers(String userId);
 
+
+    /**
+     * 自动清除不合法的志愿者
+     * */
+    public ResultInfo<String> cleanVolunteers(String userId);
 
     /**
      * 获取注册的志愿者

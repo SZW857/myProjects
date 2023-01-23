@@ -75,6 +75,8 @@ public class LoginInterceptor implements HandlerInterceptor {
 //=======================================社区新闻===========================================================
                 request.getRequestURI().equals("/admin/selectAdminInfo")||  //获取管理员
                 request.getRequestURI().equals("/admin/getNewsInfo")||      //获取社区新闻
+//=======================================荣誉排行===========================================================
+                request.getRequestURI().contains("/rankVolunteers")||
 //=======================================测试接口===========================================================
                 request.getRequestURI().contains("/user/measure");          //测试接口
 

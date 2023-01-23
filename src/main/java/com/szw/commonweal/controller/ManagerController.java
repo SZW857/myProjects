@@ -114,12 +114,50 @@ public class ManagerController {
     }
 
     /**
+     * 管理员修改邮箱(DONE)*
+     * */
+    @CrossOrigin
+    @ResponseBody
+    @RequestMapping("/changEmail")
+    public ResultInfo<String> changeEmail(@RequestParam("adminName")String adminName,@RequestParam("email")String email){
+        return managerService.changEmail(adminName,email);
+    }
+
+    /**
+     * 管理员修改手机号(DONE)*
+     * */
+    @CrossOrigin
+    @ResponseBody
+    @RequestMapping("/changTelephoneNumber")
+    public ResultInfo<String> changeTelephone(@RequestParam("adminName")String adminName, @RequestParam("telephone")String telephone){
+        return managerService.changTelephone(adminName,telephone);
+    }
+
+    /**
      * 管理员审核注册(DONE)*
      * */
     @CrossOrigin
     @RequestMapping("/passVerify")
     public ResultInfo<String> passVerify(@RequestParam("userId")String userId){
         return managerService.verifyVolunteers(userId);
+    }
+
+    /**
+     * 管理员个人页展示(DONE)
+     * */
+    @CrossOrigin
+    @RequestMapping("/selectOneAdminInfo")
+    public List getOneAdminInfo(@RequestParam("adminId")String adminId){
+        return managerService.getOneManagerInfo(adminId);
+    }
+
+    /**
+     * 管理员自动清除不合法的注册者(DONE)*
+     * */
+    @CrossOrigin
+    @RequestMapping("/delVolunteer")
+    public ResultInfo<String> cleanVolunteers(@RequestParam("userId")String userId){
+        return managerService.cleanVolunteers(userId);
     }
 
 }
