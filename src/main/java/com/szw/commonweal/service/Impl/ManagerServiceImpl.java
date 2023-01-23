@@ -3,14 +3,20 @@ package com.szw.commonweal.service.Impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
+import com.szw.commonweal.dao.GetVolunteerMapper;
 import com.szw.commonweal.dao.MangerMapper;
+import com.szw.commonweal.dao.VolunteerMapper;
 import com.szw.commonweal.entity.Manager;
 import com.szw.commonweal.entity.ResultInfo;
+import com.szw.commonweal.entity.View.GetVolunteers;
+import com.szw.commonweal.entity.Volunteer;
 import com.szw.commonweal.service.ManagerService;
 import com.szw.commonweal.utils.Base64;
 import com.szw.commonweal.utils.JwtUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -24,7 +30,8 @@ import static com.szw.commonweal.utils.EphemeralCode.TELEPHONEREALCODE;
 public class ManagerServiceImpl implements ManagerService {
     @Autowired
     private MangerMapper mangerMapper;
-
+    @Autowired
+    private GetVolunteerMapper getVolunteerMapper;
 
 
 
@@ -34,10 +41,41 @@ public class ManagerServiceImpl implements ManagerService {
     @Override
     public List getManagerInfo() {
         QueryWrapper<Manager> wrapper = new QueryWrapper<>();
-        wrapper.select("admin_name","admin_id");
+        wrapper.select("admin_name","id_card");
         List<Map<String, Object>> mapList = mangerMapper.selectMaps(wrapper);
         System.out.println(mapList);
         return mapList;
+    }
+
+
+    /**
+     * 通过志愿者的审核(DONE)
+     * */
+    @Override
+    public ResultInfo<String> verifyVolunteers(String userId) {
+        ResultInfo<String> res = new ResultInfo<>();
+        UpdateWrapper<GetVolunteers> wrapper = new UpdateWrapper<>();
+        wrapper.set("verify_status",1).eq("user_id",userId);
+        int i = getVolunteerMapper.update(null, wrapper);
+        if (i==1){
+            res.setStatus(ResultInfo.SUCCESS);
+            res.setData("操作成功,审核通过");
+        }else {
+            res.setStatus(ResultInfo.FAIL);
+            res.setData("审核不通过");
+        }
+        return res;
+    }
+
+    /**
+     * 获取注册的志愿者(DONE)
+     * */
+    @Override
+    public List getVolunteers() {
+        QueryWrapper<GetVolunteers> wrapper = new QueryWrapper<>();
+        wrapper.select("*").eq("verify_status",0);
+        List<GetVolunteers> list = getVolunteerMapper.selectList(wrapper);
+        return list;
     }
 
     /**
@@ -89,7 +127,7 @@ public class ManagerServiceImpl implements ManagerService {
     public ResultInfo<String> idCheck(String idCard) {
         ResultInfo<String> res=new ResultInfo<>();
         QueryWrapper<Manager> wrapper = new QueryWrapper<>();
-        wrapper.select("admin_id").eq("admin_id",idCard);
+        wrapper.select("id_card").eq("id_card",idCard);
         List<Manager> list = mangerMapper.selectList(wrapper);
         System.out.println("集合为："+list);
         System.out.println("本次的参数：："+idCard);
@@ -104,10 +142,31 @@ public class ManagerServiceImpl implements ManagerService {
     }
 
     /**
+     * 用户修改密码(DONE)*
+     * */
+    @Transactional
+    @Override
+    public ResultInfo<String> changePasswd(String adminId, String passwd) {
+        ResultInfo<String> res = new ResultInfo<>();
+        String X= Base64.unLock(passwd);
+        UpdateWrapper<Manager> wrapper = new UpdateWrapper<>();
+        wrapper.eq("id_card",adminId).set("passwd",X);
+        int i = mangerMapper.update(null, wrapper);
+        if (i==1){
+            res.setStatus(ResultInfo.SUCCESS);
+            res.setData("管理员修改密码成功");
+        }else {
+            res.setStatus(ResultInfo.FAIL);
+            res.setData("管理员修改密码失败");
+        }
+        return res;
+    }
+
+    /**
      * 用户修改密码(忘记密码)(DONE)
      * */
     @Override
-    public ResultInfo<String> changePasswd(String adminId,String passwd,String falseCode) {
+    public ResultInfo<String> changePasswd_F(String adminId,String passwd,String falseCode) {
         ResultInfo<String> res = new ResultInfo<>();
         System.out.println("管理员身份证"+adminId);
         System.out.println("管理员的密码"+passwd);
@@ -125,7 +184,7 @@ public class ManagerServiceImpl implements ManagerService {
             TELEPHONEREALCODE="";
             EMAILREALCODE="";
             UpdateWrapper<Manager> wrapper = new UpdateWrapper<>();
-            wrapper.set("passwd",passwd).eq("admin_id",adminId);
+            wrapper.set("passwd",passwd).eq("id_card",adminId);
             int update = mangerMapper.update(null, wrapper);
             if (update==1){
                 res.setStatus(ResultInfo.SUCCESS);
@@ -154,7 +213,7 @@ public class ManagerServiceImpl implements ManagerService {
     public ResultInfo<String> checkEmailLogin(String email, String passwd) {
         ResultInfo<String> res=new ResultInfo<>();
         QueryWrapper<Manager> wrapper = new QueryWrapper<>();
-        wrapper.select("admin_name","admin_id","email")
+        wrapper.select("admin_name","id_card","email")
                 .eq("email",email)
                 .eq("passwd",passwd);
         List<Manager> list = mangerMapper.selectList(wrapper);
@@ -169,7 +228,7 @@ public class ManagerServiceImpl implements ManagerService {
             res.setStatus(ResultInfo.SUCCESS);
             res.setData(token);
             res.setExtra(list.get(0).getAdminName());
-            res.setID(list.get(0).getAdminId());
+            res.setID(list.get(0).getIdCard());
             return res;
         }else {
             res.setStatus(ResultInfo.FAIL);
@@ -185,7 +244,7 @@ public class ManagerServiceImpl implements ManagerService {
     public ResultInfo<String> checkLogin(String adminName, String passwd) {
         ResultInfo<String> res=new ResultInfo<>();
         QueryWrapper<Manager> wrapper = new QueryWrapper<>();
-        wrapper.select("admin_name","admin_id")
+        wrapper.select("admin_name","id_card")
                 .eq("admin_name",adminName)
                 .eq("passwd",passwd);
         List<Manager> list = mangerMapper.selectList(wrapper);
@@ -200,7 +259,7 @@ public class ManagerServiceImpl implements ManagerService {
             res.setStatus(ResultInfo.SUCCESS);
             res.setData(token);
             res.setExtra(adminName);
-            res.setID(list.get(0).getAdminId());
+            res.setID(list.get(0).getIdCard());
             return res;
         }else {
             res.setStatus(ResultInfo.FAIL);

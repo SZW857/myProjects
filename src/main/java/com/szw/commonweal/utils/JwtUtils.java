@@ -51,7 +51,4 @@ public class JwtUtils {
         return map;
     }
 
-    public static  DecodedJWT getVerify(String token) {
-        return JWT.require(Algorithm.HMAC256(SIGN)).build().verify(token);
-    }
 }

@@ -36,7 +36,7 @@ public class VolunteerController {
     @RequestMapping("/telephoneCheck")
     @ResponseBody
     public ResultInfo<String> telephoneCheck(HttpServletRequest request){
-        return volunteerService.telephoneCheck(request.getParameter("telephoneNum"));
+        return volunteerService.telephoneCheck(request.getParameter("telephone"));
     }
 
     /**
@@ -47,7 +47,6 @@ public class VolunteerController {
     @ResponseBody
     public ResultInfo<String> userId(HttpServletRequest request){
         return volunteerService.userNameCheck(request.getParameter("userId"));
-
     }
 
     /**
@@ -125,7 +124,8 @@ public class VolunteerController {
      * 用户修改手机号 **(DONE)
      * */
     @CrossOrigin
-    @RequestMapping("/changTelephone")
+    @ResponseBody
+    @RequestMapping("/changTelephoneNumber")
     public ResultInfo<String> changeTelephone(@RequestParam("userId")String userId, @RequestParam("telephone")String telephone){
         return volunteerService.changTelephone(userId,telephone);
     }
@@ -136,7 +136,7 @@ public class VolunteerController {
     @CrossOrigin
     @ResponseBody
     @RequestMapping("/saveInformation")
-    public ResultInfo<String> changeTelephone(@RequestParam("userId")String userId,
+    public ResultInfo<String> saveInformation(@RequestParam("userId")String userId,
                                               @RequestParam("address")String address,
                                               @RequestParam("sex")String sex,
                                               @RequestParam("age") int age){

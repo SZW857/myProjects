@@ -9,6 +9,8 @@ import com.szw.commonweal.utils.SendTelephoneMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+
 @RestController
 public class SendCodeController {
 
@@ -35,8 +37,9 @@ public class SendCodeController {
      * */
     @CrossOrigin
     @RequestMapping("/sendEmail")
-    public ResultInfo<String>AAA(@RequestParam("falseCode")String falseCode,@RequestParam("email") String email){
-        return emailService.createRegisterEmailCode(EphemeralCode.EMAILREALCODE=Base64.unLock(falseCode),email);
+    public ResultInfo<String>AAA(
+            @RequestParam("falseCode")String falseCode, @RequestParam("email") String email,HttpServletRequest request){
+        return emailService.createRegisterEmailCode(EphemeralCode.EMAILREALCODE=Base64.unLock(falseCode),email,request);
     }
 
 

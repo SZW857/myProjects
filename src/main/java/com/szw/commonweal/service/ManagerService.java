@@ -1,8 +1,6 @@
 package com.szw.commonweal.service;
 
-import com.szw.commonweal.entity.Manager;
 import com.szw.commonweal.entity.ResultInfo;
-import com.szw.commonweal.entity.Volunteer;
 
 import java.util.List;
 
@@ -44,9 +42,23 @@ public interface ManagerService {
     /**
      * 管理员修改密码(忘记密码)
      * */
-    public ResultInfo<String> changePasswd(String idCard,String passwd,String fLaseCode);
+    public ResultInfo<String> changePasswd_F(String idCard,String passwd,String fLaseCode);
+
+    /**
+     * 管理员修改密码*
+     * */
+    public ResultInfo<String> changePasswd(String adminId,String passwd);
+
+    /**
+     * 管理员审核注册的志愿者*
+     * */
+    public ResultInfo<String> verifyVolunteers(String userId);
 
 
+    /**
+     * 获取注册的志愿者
+     * */
+    public List getVolunteers();
 
 
 }

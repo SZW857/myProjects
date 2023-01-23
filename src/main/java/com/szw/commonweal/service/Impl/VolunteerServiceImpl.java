@@ -1,10 +1,10 @@
 package com.szw.commonweal.service.Impl;
 
-
-
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
-import com.szw.commonweal.dao.UserMapper;
+import com.szw.commonweal.dao.DistinctMapper;
+import com.szw.commonweal.dao.VolunteerMapper;
+import com.szw.commonweal.entity.View.EmailAndTelephone;
 import com.szw.commonweal.entity.ResultInfo;
 import com.szw.commonweal.entity.Volunteer;
 import com.szw.commonweal.service.VolunteerService;
@@ -26,18 +26,21 @@ import static com.szw.commonweal.utils.EphemeralCode.TELEPHONEREALCODE;
 @Service
 public class VolunteerServiceImpl  implements VolunteerService {
     @Autowired
-    private UserMapper userMapper;
+    private VolunteerMapper volunteerMapper;
+    @Autowired
+    private DistinctMapper distinctMapper;
 
-    ResultInfo<String> res = new ResultInfo<>();
+
 
     /**
      * 用户Email检测(DONE)
      * */
     @Override
     public ResultInfo<String> emailCheck(String email) {
-        QueryWrapper<Volunteer> wrapper = new QueryWrapper<>();
+        ResultInfo<String> res = new ResultInfo<>();
+        QueryWrapper<EmailAndTelephone> wrapper = new QueryWrapper<>();
         wrapper.select("email").eq("email",email);
-        List<Volunteer> list = userMapper.selectList(wrapper);
+        List<EmailAndTelephone> list = distinctMapper.selectList(wrapper);
         System.out.println("集合为："+list);
         System.out.println("用户名本次的参数：："+email);
         if (!list.isEmpty()){
@@ -55,9 +58,10 @@ public class VolunteerServiceImpl  implements VolunteerService {
      * */
     @Override
     public ResultInfo<String> userNameCheck(String userId) {
+        ResultInfo<String> res = new ResultInfo<>();
         QueryWrapper<Volunteer> wrapper = new QueryWrapper<>();
         wrapper.select("user_id").eq("user_id",userId);
-        List<Volunteer> list = userMapper.selectList(wrapper);
+        List<Volunteer> list = volunteerMapper.selectList(wrapper);
         System.out.println("集合为："+list);
         System.out.println("用户名本次的参数：："+userId);
         if (!list.isEmpty()){
@@ -75,9 +79,10 @@ public class VolunteerServiceImpl  implements VolunteerService {
      * */
     @Override
     public ResultInfo<String> idCheck(String idCard) {
-        QueryWrapper<Volunteer> wrapper = new QueryWrapper<>();
+        ResultInfo<String> res = new ResultInfo<>();
+        QueryWrapper<EmailAndTelephone> wrapper = new QueryWrapper<>();
         wrapper.select("id_card").eq("id_card",idCard);
-        List<Volunteer> list = userMapper.selectList(wrapper);
+        List<EmailAndTelephone> list = distinctMapper.selectList(wrapper);
         System.out.println("集合为："+list);
         System.out.println("本次的参数：："+idCard);
         if (!list.isEmpty()){
@@ -95,9 +100,10 @@ public class VolunteerServiceImpl  implements VolunteerService {
      * */
     @Override
     public ResultInfo<String> telephoneCheck(String telephoneNum) {
-        QueryWrapper<Volunteer> wrapper = new QueryWrapper<>();
+        ResultInfo<String> res = new ResultInfo<>();
+        QueryWrapper<EmailAndTelephone> wrapper = new QueryWrapper<>();
         wrapper.select("telephone").eq("telephone",telephoneNum);
-        List<Volunteer> list = userMapper.selectList(wrapper);
+        List<EmailAndTelephone> list = distinctMapper.selectList(wrapper);
         System.out.println("集合为："+list);
         System.out.println("本次的参数：："+telephoneNum);
         if (!list.isEmpty()){
@@ -123,7 +129,7 @@ public class VolunteerServiceImpl  implements VolunteerService {
                 EphemeralCode.EMAILREALCODE="";
                 UpdateWrapper<Volunteer> wrapper = new UpdateWrapper<>();
                 wrapper.set("passwd",passwd).eq("id_card",idCard);
-                int update = userMapper.update(null, wrapper);
+                int update = volunteerMapper.update(null, wrapper);
                 if (update==1){
                     res.setStatus(ResultInfo.SUCCESS);
                     res.setData("密码修改成功");
@@ -151,25 +157,37 @@ public class VolunteerServiceImpl  implements VolunteerService {
     @Override
     public ResultInfo<String> changEmail(String userId, String email) {
         ResultInfo<String> res = new ResultInfo<>();
-        UpdateWrapper<Volunteer> wrapper = new UpdateWrapper<>();
-        wrapper.set("email",email).eq("user_id",userId);
-        int update = userMapper.update(null, wrapper);
-        if (update==1){
-            res.setStatus(ResultInfo.SUCCESS);
-            res.setData("邮箱修改成功");
-        }else {
+        QueryWrapper<EmailAndTelephone> distinct = new QueryWrapper<>();
+        distinct.select("email").eq("email",email);
+        List<EmailAndTelephone> list = distinctMapper.selectList(distinct);
+        if (!list.isEmpty()){
             res.setStatus(ResultInfo.FAIL);
-            res.setData("邮箱修改失败");
+            res.setData("邮箱已经存在");
+            return res;
+        }else {
+            UpdateWrapper<Volunteer> wrapper = new UpdateWrapper<>();
+            wrapper.set("email",email).eq("user_id",userId);
+            int update = volunteerMapper.update(null, wrapper);
+            if (update==1){
+                res.setStatus(ResultInfo.SUCCESS);
+                res.setData("邮箱修改成功");
+            }else {
+                res.setStatus(ResultInfo.FAIL);
+                res.setData("邮箱修改失败");
+            }
+            return res;
         }
-        return res;
     }
 
+    /**
+     * 用户保存信息*
+     * */
     @Override
     public ResultInfo<String> saveInformation(String userId,String address, String sex, int age) {
         ResultInfo<String> res = new ResultInfo<>();
         UpdateWrapper<Volunteer> wrapper = new UpdateWrapper<>();
         wrapper.eq("user_id",userId).set("address",address).set("age",age).set("sex",sex);
-        int i = userMapper.update(null, wrapper);
+        int i = volunteerMapper.update(null, wrapper);
         if (i==1){
             res.setStatus(ResultInfo.SUCCESS);
             res.setData("保存成功");
@@ -181,21 +199,29 @@ public class VolunteerServiceImpl  implements VolunteerService {
     }
 
     /**
-     * 用户修改手机号*(DONE)
+     * 用户修改手机号(DONE)*
      * */
     @Override
     @Transactional
     public ResultInfo<String> changTelephone(String userId, String telephone) {
         ResultInfo<String> res = new ResultInfo<>();
-        UpdateWrapper<Volunteer> wrapper = new UpdateWrapper<>();
-        wrapper.eq("user_id",userId).set("telephone",telephone);
-        int update = userMapper.update(null,wrapper);
-        if (update==1){
-            res.setStatus(ResultInfo.SUCCESS);
-            res.setData("手机号修改成功");
-        }else {
+        QueryWrapper<EmailAndTelephone> wrapper1 = new QueryWrapper<>();
+        wrapper1.select("telephone").eq("telephone",telephone);
+        List<EmailAndTelephone> list = distinctMapper.selectList(wrapper1);
+        if (!list.isEmpty()){
             res.setStatus(ResultInfo.FAIL);
-            res.setData("手机号修改失败");
+            res.setData("该手机号已经注册");
+        }else {
+            UpdateWrapper<Volunteer> wrapper = new UpdateWrapper<>();
+            wrapper.eq("user_id",userId).set("telephone",telephone);
+            int update = volunteerMapper.update(null,wrapper);
+            if (update==1){
+                res.setStatus(ResultInfo.SUCCESS);
+                res.setData("手机号修改成功");
+            }else {
+                res.setStatus(ResultInfo.FAIL);
+                res.setData("手机号修改失败");
+            }
         }
         return res;
     }
@@ -208,7 +234,7 @@ public class VolunteerServiceImpl  implements VolunteerService {
         ResultInfo<String> res = new ResultInfo<>();
         UpdateWrapper<Volunteer> wrapper = new UpdateWrapper<>();
         wrapper.set("passwd",passwd).eq("user_id",userId);
-        int update = userMapper.update(null, wrapper);
+        int update = volunteerMapper.update(null, wrapper);
         if (update==1){
             res.setStatus(ResultInfo.SUCCESS);
             res.setData("密码修改成功");
@@ -224,27 +250,33 @@ public class VolunteerServiceImpl  implements VolunteerService {
      * */
     @Override
     public ResultInfo<String> checkLogin(String userId,String passwd) {
+        ResultInfo<String> res = new ResultInfo<>();
         QueryWrapper<Volunteer> wrapper = new QueryWrapper<>();
-            wrapper.select("user_id")
+            wrapper.select("*")
                     .eq("passwd",passwd);
-            List<Volunteer> list = userMapper.selectList(wrapper);
+            List<Volunteer> list = volunteerMapper.selectList(wrapper);
             System.out.println("service层集合为："+list);
             System.out.println("service层的参数：："+userId);
-            System.out.println("service层的参数：："+passwd);
+
         HashMap<String, String> map = new HashMap<>();
-            if (!list.isEmpty()){
-                map.put("id",userId);
-                map.put("pwd",passwd);
-                String token = JwtUtils.setToken(map);
-                res.setStatus(ResultInfo.SUCCESS);
-                res.setData(token);
-                res.setExtra(userId);
-                return res;
+            if(!list.isEmpty()){
+                if (list.get(0).getVerifyStatus()!=0){
+                    map.put("id",userId);
+                    map.put("pwd",passwd);
+                    String token = JwtUtils.setToken(map);
+                    res.setStatus(ResultInfo.SUCCESS);
+                    res.setData(token);
+                    res.setExtra(userId);
+                }else {
+                    res.setStatus("NoPassed");
+        System.out.println("service层的参数1：："+list.get(0).getVerifyStatus());
+                    res.setData("暂未通过管理员审核!!!,请等待...");
+                }
             }else {
                 res.setStatus(ResultInfo.FAIL);
                 res.setData("登陆失败");
-                return res;
             }
+                return res;
     }
 
     /**
@@ -252,8 +284,8 @@ public class VolunteerServiceImpl  implements VolunteerService {
      * */
     @Override
     public ResultInfo<String> userRegister(Volunteer volunteer) {
-
-        int i = userMapper.insert(volunteer);
+        ResultInfo<String> res = new ResultInfo<>();
+        int i = volunteerMapper.insert(volunteer);
         System.out.println("本次的参数:"+i);
         if (i==1){
             res.setStatus(ResultInfo.SUCCESS);
@@ -272,7 +304,7 @@ public class VolunteerServiceImpl  implements VolunteerService {
     public List PersonInfo(String userId) {
         QueryWrapper<Volunteer> wrapper = new QueryWrapper<>();
         wrapper.select("age","telephone","email","address","sex","sign_num","verify_status").eq("user_id",userId);
-        List<Map<String, Object>> list = userMapper.selectMaps(wrapper);
+        List<Map<String, Object>> list = volunteerMapper.selectMaps(wrapper);
         return list;
     }
 

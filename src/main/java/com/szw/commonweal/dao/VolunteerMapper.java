@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository;
  * 志愿者
  * */
 @Repository
-public interface UserMapper extends BaseMapper<Volunteer> {
+public interface VolunteerMapper extends BaseMapper<Volunteer> {
 
 
 

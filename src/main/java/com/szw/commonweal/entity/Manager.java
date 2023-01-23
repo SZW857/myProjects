@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class Manager {
     @TableId(type = IdType.NONE)//指定主键
-    private String adminId;
+    private String idCard;
     private String adminName;
     private String email;
     private String passwd;

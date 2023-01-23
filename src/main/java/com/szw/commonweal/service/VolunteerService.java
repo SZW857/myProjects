@@ -71,9 +71,6 @@ public interface VolunteerService {
      * */
     public List PersonInfo(String userId);
 
-
-
-
 }
 
 

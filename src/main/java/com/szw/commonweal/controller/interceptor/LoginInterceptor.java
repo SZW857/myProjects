@@ -14,7 +14,8 @@ import java.util.Map;
 public class LoginInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        System.out.println("url"+request.getRequestURI());
+        System.out.println("路经"+request.getRequestURI());
+
         //放行
         if (Accessible(request)){
             return true;
@@ -54,7 +55,7 @@ public class LoginInterceptor implements HandlerInterceptor {
     private boolean Accessible(HttpServletRequest request){
         return
 //=======================================志愿者=============================================================
-                request.getRequestURI().equals("/user/login") ||            //用户登录
+                request.getRequestURI().contains("/user/login") ||            //用户登录
                 request.getRequestURI().equals("/user/register")||          //注册
                 request.getRequestURI().contains("/user/changPasswd_F")||   //志愿者修改密码(忘记密码)
                 request.getRequestURI().contains("/user/NameCheck")||       //用户名检测

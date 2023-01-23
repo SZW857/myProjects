@@ -18,8 +18,8 @@ import java.util.List;
 
 @Configuration
 public class InterceptorConfiguration implements WebMvcConfigurer {
-private static final List<String> EXCLUDE_PATH= Arrays.asList("/","/*.html","/css/**","/js/**","/picture/**");
-
+private static final List<String> EXCLUDE_PATH= Arrays.asList(
+        "/","/favicon.ico","/error","/*.html","/css/**","/js/**","/picture/**","/file/**");
 
     @Autowired
     private LoginInterceptor loginInterceptor;
@@ -45,8 +45,6 @@ private static final List<String> EXCLUDE_PATH= Arrays.asList("/","/*.html","/cs
                 //暴露哪些原始请求头部信息
                 .exposedHeaders("*");
     }
-
-
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {

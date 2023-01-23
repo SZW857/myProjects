@@ -21,7 +21,6 @@ public class ManagerController {
     @Autowired
     private NewsInfoService newsInfoService;
 
-
     /**
      * 提供管理员的名单(DONE)
      * */
@@ -36,8 +35,17 @@ public class ManagerController {
      * */
     @CrossOrigin
     @RequestMapping("/getNewsInfo")
-    public List aaa(){
+    public List getNews(){
         return newsInfoService.getNews();
+    }
+
+    /**
+     * 获取注册的志愿者(DONE)
+     * */
+    @CrossOrigin
+    @RequestMapping("/getVolunteersInfo")
+    public List getVolunteers(){
+        return managerService.getVolunteers();
     }
 
     /**
@@ -77,7 +85,7 @@ public class ManagerController {
     }
 
     /**
-     * 管理员身份证号检测 (DONE)
+     * 管理员身份证号检测(DONE)
      * */
     @CrossOrigin()
     @RequestMapping("/idCardCheck")
@@ -91,8 +99,28 @@ public class ManagerController {
      * */
     @CrossOrigin
     @RequestMapping("/changPasswd_F")
-    public ResultInfo<String> changePasswd(@RequestParam("idCard")String idCard, @RequestParam("passwd")String passwd, @PathParam("falseCode")String falseCode){
-            return managerService.changePasswd(idCard,passwd,falseCode);
+    public ResultInfo<String> changePasswd_F(@RequestParam("idCard")String idCard, @RequestParam("passwd")String passwd,
+                                           @PathParam("falseCode")String falseCode){
+            return managerService.changePasswd_F(idCard,passwd,falseCode);
     }
+
+    /**
+     * 管理员修改密码(DONE)*
+     * */
+    @CrossOrigin
+    @RequestMapping("/changPasswd")
+    public ResultInfo<String> changePasswd(@RequestParam("adminId")String adminId, @RequestParam("passwd")String passwd){
+        return managerService.changePasswd(adminId,passwd);
+    }
+
+    /**
+     * 管理员审核注册(DONE)*
+     * */
+    @CrossOrigin
+    @RequestMapping("/passVerify")
+    public ResultInfo<String> passVerify(@RequestParam("userId")String userId){
+        return managerService.verifyVolunteers(userId);
+    }
+
 }
 
