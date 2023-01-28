@@ -1,22 +1,24 @@
 package com.szw.commonweal.service.Impl;
 
-
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.szw.commonweal.dao.DistinctMapper;
 import com.szw.commonweal.dao.GetVolunteerMapper;
 import com.szw.commonweal.dao.MangerMapper;
+import com.szw.commonweal.dao.ProjectMapper;
 import com.szw.commonweal.entity.Manager;
 import com.szw.commonweal.entity.ResultInfo;
+import com.szw.commonweal.entity.views.AdminPublishActivity;
 import com.szw.commonweal.entity.views.EmailAndTelephone;
 import com.szw.commonweal.entity.views.GetVolunteers;
 import com.szw.commonweal.service.ManagerService;
 import com.szw.commonweal.utils.Base64;
 import com.szw.commonweal.utils.JwtUtils;
+import com.szw.commonweal.utils.UploadUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
+import org.springframework.web.multipart.MultipartFile;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -34,7 +36,8 @@ public class ManagerServiceImpl implements ManagerService {
     private GetVolunteerMapper getVolunteerMapper;
     @Autowired
     private DistinctMapper distinctMapper;
-
+    @Autowired
+    private ProjectMapper projectMapper;
 
 
     /**
@@ -84,6 +87,31 @@ public class ManagerServiceImpl implements ManagerService {
             res.setStatus(ResultInfo.FAIL);
         }
         return res;
+    }
+
+    /**
+     * 管理员发布志愿活动
+     * */
+    @Override
+    public ResultInfo<String> publishActivity(AdminPublishActivity activity) {
+        ResultInfo<String> res = new ResultInfo<>();
+        int i = projectMapper.insert(activity);
+        System.out.println("插入结果"+i);
+        if (i==1){
+            res.setCode(200);
+        }else {
+            res.setStatus(ResultInfo.FAIL);
+            res.setData("发布失败");
+        }
+        return res;
+    }
+
+    /**
+     * 管理员上传活动图片
+     * */
+    @Override
+    public ResultInfo<String> uploadActivePic(MultipartFile picture) throws Exception{
+        return UploadUtil.uploadImage(picture);
     }
 
     /**
@@ -254,7 +282,6 @@ public class ManagerServiceImpl implements ManagerService {
             System.out.println("手机1真实验证码"+TELEPHONEREALCODE);
             System.out.println("邮件1真实验证码"+EMAILREALCODE);
             System.out.println("结果"+EMAILREALCODE.equals(X));
-//            System.out.println("EMAILREALCODE的typpe"+EMAILREALCODE.getClass().getName());
         if (TELEPHONEREALCODE.equals(X) || EMAILREALCODE.equals(X)){
             //清除缓存验证码
             TELEPHONEREALCODE="";
@@ -287,9 +314,9 @@ public class ManagerServiceImpl implements ManagerService {
      *
      * @return*/
     @Override
-    public List<Map<String, Object>> getOneManagerInfo(String adminId) {
+    public List<Map<String, Object>> getOneManagerInfo(String adminName) {
         QueryWrapper<Manager> wrapper = new QueryWrapper<>();
-        wrapper.select("telephone","email").eq("admin_name",adminId);
+        wrapper.select("telephone","email").eq("admin_name",adminName);
         List<Map<String, Object>> maps = mangerMapper.selectMaps(wrapper);
         return maps;
     }
@@ -301,7 +328,7 @@ public class ManagerServiceImpl implements ManagerService {
     public ResultInfo<String> checkEmailLogin(String email, String passwd) {
         ResultInfo<String> res=new ResultInfo<>();
         QueryWrapper<Manager> wrapper = new QueryWrapper<>();
-        wrapper.select("admin_name","id_card","email")
+        wrapper.select("*")
                 .eq("email",email)
                 .eq("passwd",passwd);
         List<Manager> list = mangerMapper.selectList(wrapper);
@@ -315,8 +342,10 @@ public class ManagerServiceImpl implements ManagerService {
             String token = JwtUtils.setToken(map);
             res.setStatus(ResultInfo.SUCCESS);
             res.setData(token);
-            res.setExtra(list.get(0).getAdminName());
             res.setID(list.get(0).getIdCard());
+            res.setAdminName(list.get(0).getAdminName());
+            res.setEmail(list.get(0).getEmail());
+            res.setTelephone(list.get(0).getTelephone());
             return res;
         }else {
             res.setStatus(ResultInfo.FAIL);
@@ -332,7 +361,7 @@ public class ManagerServiceImpl implements ManagerService {
     public ResultInfo<String> checkLogin(String adminName, String passwd) {
         ResultInfo<String> res=new ResultInfo<>();
         QueryWrapper<Manager> wrapper = new QueryWrapper<>();
-        wrapper.select("admin_name","id_card")
+        wrapper.select("*")
                 .eq("admin_name",adminName)
                 .eq("passwd",passwd);
         List<Manager> list = mangerMapper.selectList(wrapper);
@@ -346,8 +375,10 @@ public class ManagerServiceImpl implements ManagerService {
             String token = JwtUtils.setToken(map);
             res.setStatus(ResultInfo.SUCCESS);
             res.setData(token);
-            res.setExtra(adminName);
             res.setID(list.get(0).getIdCard());
+            res.setAdminName(adminName);
+            res.setEmail(list.get(0).getEmail());
+            res.setTelephone(list.get(0).getTelephone());
             return res;
         }else {
             res.setStatus(ResultInfo.FAIL);

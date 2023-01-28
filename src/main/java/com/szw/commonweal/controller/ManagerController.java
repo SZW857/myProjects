@@ -2,15 +2,20 @@ package com.szw.commonweal.controller;
 
 
 import com.szw.commonweal.entity.ResultInfo;
+import com.szw.commonweal.entity.views.AdminPublishActivity;
 import com.szw.commonweal.service.ManagerService;
 import com.szw.commonweal.service.NewsInfoService;
 import com.szw.commonweal.utils.Base64;
+import com.szw.commonweal.utils.UploadUtil;
+import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 
 import javax.websocket.server.PathParam;
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -147,8 +152,8 @@ public class ManagerController {
      * */
     @CrossOrigin
     @RequestMapping("/selectOneAdminInfo")
-    public List getOneAdminInfo(@RequestParam("adminId")String adminId){
-        return managerService.getOneManagerInfo(adminId);
+    public List getOneAdminInfo(@RequestParam("adminName")String adminName){
+        return managerService.getOneManagerInfo(adminName);
     }
 
     /**
@@ -159,6 +164,44 @@ public class ManagerController {
     public ResultInfo<String> cleanVolunteers(@RequestParam("userId")String userId){
         return managerService.cleanVolunteers(userId);
     }
+
+    /**
+     * 管理员上传志愿活动图片
+     * */
+     @SneakyThrows
+     @CrossOrigin
+     @RequestMapping("/upload")
+     public ResultInfo<String> uploadActivePic(MultipartFile file) {
+     return managerService.uploadActivePic(file);
+     }
+
+    /**
+     * 管理员发布志愿活动
+     * */
+    @CrossOrigin
+    @RequestMapping("/publishActive")
+    public ResultInfo<String> publishActive(AdminPublishActivity adminPublishActivity){
+        return managerService.publishActivity(adminPublishActivity);
+    }
+
+    /**
+     * 上传志愿活动图片的接口 (DONE)
+     * */
+    @ResponseBody
+    @RequestMapping("/uploadImage")
+    public ResultInfo<String> measure(@RequestParam(value = "avatar",required = false) MultipartFile avatar) throws IOException{
+        return UploadUtil.uploadImage(avatar);
+    }
+
+    /**
+     * 用于删除志愿活动的接口 (DONE)
+     * */
+    @ResponseBody
+    @RequestMapping("/deleteImage")
+    public String measure(@RequestParam("path") String path) throws IOException{
+        return UploadUtil.DeleteImage(path);
+    }
+
 
 }
 

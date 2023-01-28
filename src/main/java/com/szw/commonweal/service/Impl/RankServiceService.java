@@ -23,10 +23,4 @@ public class RankServiceService implements RankService {
         System.out.println(list);
         return list;
     }
-
-//    public List aaa(){
-//            Page<RankVolunteers> page = new Page<>(1,10);
-//            Page<RankVolunteers> rankVolunteersPage = rankMapper.selectPage(page, null);
-//            return rankVolunteersPage[0];
-//    }
 }

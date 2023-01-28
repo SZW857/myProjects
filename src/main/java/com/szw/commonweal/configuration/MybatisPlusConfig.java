@@ -10,11 +10,9 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 
 @Configuration
+@MapperScan("com.szw.commonweal.dao")
 public class MybatisPlusConfig {
-//    @Bean
-//    public PaginationInnerInterceptor paginationInnerInterceptor() {
-//        return new PaginationInnerInterceptor();
-//    }
+
     @Bean
     public MybatisPlusInterceptor mybatisPlusInterceptor(){
         MybatisPlusInterceptor interceptor=new MybatisPlusInterceptor();

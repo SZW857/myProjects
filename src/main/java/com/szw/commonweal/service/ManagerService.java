@@ -1,7 +1,10 @@
 package com.szw.commonweal.service;
 
 import com.szw.commonweal.entity.ResultInfo;
+import com.szw.commonweal.entity.views.AdminPublishActivity;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Map;
 
@@ -71,7 +74,6 @@ public interface ManagerService {
      * */
     public ResultInfo<String> verifyVolunteers(String userId);
 
-
     /**
      * 自动清除不合法的志愿者
      * */
@@ -82,5 +84,14 @@ public interface ManagerService {
      * */
     public List getVolunteers();
 
+    /**
+     * 管理员上传活动图片
+     * */
+    public ResultInfo<String> uploadActivePic(MultipartFile picture) throws Exception;
+
+    /**
+     * 管理员发布志愿活动
+     * */
+    public ResultInfo<String> publishActivity(AdminPublishActivity activity);
 
 }

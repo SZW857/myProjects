@@ -9,7 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 public class LoggerInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        System.out.println("已拦截接收到来自：" + request.getRemoteAddr() + "的请求：" + request.getRequestURI());
+        System.out.println("拦截日志收到来自：" + request.getRemoteAddr() + "的请求：" + request.getRequestURI());
         return true;
     }
     @Override

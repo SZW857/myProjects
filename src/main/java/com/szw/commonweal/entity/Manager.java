@@ -15,5 +15,6 @@ public class Manager {
     private String adminName;
     private String email;
     private String passwd;
+    private String telephone;
 
 }

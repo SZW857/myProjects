@@ -37,7 +37,7 @@ public class SendCodeController {
      * */
     @CrossOrigin
     @RequestMapping("/sendEmail")
-    public ResultInfo<String>AAA(
+    public ResultInfo<String>sendEmail(
             @RequestParam("falseCode")String falseCode, @RequestParam("email") String email,HttpServletRequest request){
         EphemeralCode.EMAILREALCODE=Base64.unLock(falseCode);
         return emailService.createRegisterEmailCode(EphemeralCode.EMAILREALCODE,email,request);

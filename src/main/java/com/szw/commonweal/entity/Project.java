@@ -1,5 +1,9 @@
 package com.szw.commonweal.entity;
 
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -9,17 +13,32 @@ import java.util.Date;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@TableName(value = "project")
 public class Project {
-    private String pNum;
+    @TableId(type = IdType.AUTO)
+    private String serialNum;
+    @TableField(value = "start_date")
+    private Date startDate;
+    @TableField(value = "p_status")
     private String pStatus;
-    private Date sTime;
-    private Date fTime;
-    private int human;
+    @TableField(value = "finish_date")
+    private Date finishDate;
+    @TableField(value = "sponsor")
     private String sponsor;
+    @TableField(value = "people_num")
+    private Integer peopleNum;
+    @TableField(value = "state")
+    private String state;
+    @TableField(value = "title")
     private String title;
+    @TableField(value = "content")
     private String content;
-    private int siginNum;
-    private String siginStatus;
-    private String idCardAdmin;
+    @TableField(value = "sign_status")
+    private String signStatus;
+    @TableField(value = "sign_num")
+    private Integer signNum;
+    @TableField(value = "adminId")
+    private String adminId;
+    @TableField(value = "userId")
     private String userId;
 }

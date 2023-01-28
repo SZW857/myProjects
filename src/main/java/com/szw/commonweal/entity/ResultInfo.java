@@ -37,6 +37,14 @@ public class ResultInfo<T> implements Serializable {
 
     private String ID = "NONE";
 
+    private String adminName = "none";
+
+    private String email = "none";
+
+    private String telephone = "none";
+
+    public  long total = 0;
+
     public ResultInfo() {
         this.status = SUCCESS;
     }

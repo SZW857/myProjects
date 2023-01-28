@@ -17,27 +17,25 @@ class CommonWealApplicationTests {
     private RankMapper rankMapper;
    @Autowired
    private DistinctMapper newsMapper;
+    public static final  String ALI_DOMAIN = "https://shizewenlyz.oss-cn-hongkong.aliyuncs.com/";
    @Test
    public void test() {
-//      System.out.println(isNumeric(this.AAA));
-      Page<RankVolunteers> page = new Page<>(1,10);
-      Page<RankVolunteers> page1 = rankMapper.selectPage(page, null);
-      page.getRecords().forEach(System.out::println);
+      //java截取某个字符之前的字符串
+         String str = "test_https://www.baidu.com/";
+         //截取_之前字符串
+         String str1 = str.substring(0, str.indexOf("_"));
+         System.out.println("截取_之前字符串:"+str1);
+
    }
-//   public static boolean isNumeric(String str){
-//      for(int i=str.length();--i>=0;){
-//         int chr=str.charAt(i);
-//         if(chr<48 || chr>57)
-//            return false;
-//      }
-//      return true;
-//   }
+    @Test
+    public void t1() {
+        String x = null;
+        if (x==null){
+            System.out.println("等于空");
+        }else {
+            System.out.println("BUDENGYU");
+        }
+    }
 
 }
-//    查询全部用户
-//    List<Volunteer> list = userMapper.selectList(null);
-//        list.forEach(System.out::println);
-//    查询指定用户
-//    QueryWrapper<Volunteer> wrapper = new QueryWrapper<>();
-//        wrapper.eq("id_card","61011119971006501x");
-//                userMapper.selectList(wrapper).forEach(System.out::println);
+

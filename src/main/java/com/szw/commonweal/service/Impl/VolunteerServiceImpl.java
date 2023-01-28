@@ -270,7 +270,7 @@ public class VolunteerServiceImpl  implements VolunteerService {
                 }else {
                     res.setStatus("NoPassed");
         System.out.println("service层的参数1：："+list.get(0).getVerifyStatus());
-                    res.setData("暂未通过管理员审核!!!,请等待...");
+                    res.setData("管理员审核中...,如未通过请留意QQ邮箱!!!");
                 }
             }else {
                 res.setStatus(ResultInfo.FAIL);

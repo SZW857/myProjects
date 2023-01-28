@@ -23,6 +23,9 @@ public class NewsInfoServiceImpl implements NewsInfoService {
     @Autowired
     private NewsMapper newsMapper;
 
+    /**
+     *管理员发布社区新闻
+     * */
     @Override
     public ResultInfo<String> PublishNews(String title,String type,String content,String adminId) {
         ResultInfo<String> res = new ResultInfo<>();
@@ -41,8 +44,6 @@ public class NewsInfoServiceImpl implements NewsInfoService {
         }
         return res;
     }
-
-
 
     /**
      * 获取发布的新闻(DONE)

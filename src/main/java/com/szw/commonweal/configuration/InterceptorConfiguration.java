@@ -1,7 +1,7 @@
 package com.szw.commonweal.configuration;
 
 
-import com.szw.commonweal.controller.interceptor.CrosInterceptor;
+import com.szw.commonweal.controller.interceptor.CrossInterceptor;
 import com.szw.commonweal.controller.interceptor.LoginInterceptor;
 import com.szw.commonweal.controller.interceptor.LoggerInterceptor;
 
@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import java.util.Arrays;
@@ -17,13 +18,13 @@ import java.util.List;
 @Configuration
 public class InterceptorConfiguration implements WebMvcConfigurer {
 private static final List<String> EXCLUDE_PATH= Arrays.asList(
-        "/","/favicon.ico","/error","/*.html","/css/**","/js/**","/picture/**","/file/**");
+        "/","/favicon.ico","/error","/*.html","/css/**","/js/**","/picture/**","/images/**");
 
     @Autowired
     private LoginInterceptor loginInterceptor;
 
     @Autowired
-    private CrosInterceptor crosInterceptor;
+    private CrossInterceptor crossInterceptor;
 
     @Autowired
     private LoggerInterceptor loggerInterceptor;
@@ -48,9 +49,17 @@ private static final List<String> EXCLUDE_PATH= Arrays.asList(
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(crosInterceptor);
+        registry.addInterceptor(crossInterceptor);
         registry.addInterceptor(loggerInterceptor);
         registry.addInterceptor(loginInterceptor)
                 .excludePathPatterns(EXCLUDE_PATH);
     }
+
+    @Override
+    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        registry.addResourceHandler("/static/**").addResourceLocations("classpath:/resources/static/");
+        WebMvcConfigurer.super.addResourceHandlers(registry);
+    }
+
+
 }
