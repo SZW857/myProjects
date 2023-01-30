@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @TableName("emails_and_telephone")
-public class EmailAndTelephone {
+public class DistinctInformation {
   private  String email;
   private  String telephone;
   private  String idCard;

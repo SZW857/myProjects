@@ -1,7 +1,8 @@
 package com.szw.commonweal.service;
 
+import com.szw.commonweal.entity.Project;
 import com.szw.commonweal.entity.ResultInfo;
-import com.szw.commonweal.entity.views.AdminPublishActivity;
+
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
@@ -92,6 +93,6 @@ public interface ManagerService {
     /**
      * 管理员发布志愿活动
      * */
-    public ResultInfo<String> publishActivity(AdminPublishActivity activity);
+    public ResultInfo<String> publishProject(HttpServletRequest project);
 
 }

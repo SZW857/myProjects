@@ -5,11 +5,13 @@ import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.szw.commonweal.dao.DistinctMapper;
 import com.szw.commonweal.dao.GetVolunteerMapper;
 import com.szw.commonweal.dao.MangerMapper;
+
 import com.szw.commonweal.dao.ProjectMapper;
 import com.szw.commonweal.entity.Manager;
+import com.szw.commonweal.entity.Project;
 import com.szw.commonweal.entity.ResultInfo;
-import com.szw.commonweal.entity.views.AdminPublishActivity;
-import com.szw.commonweal.entity.views.EmailAndTelephone;
+
+import com.szw.commonweal.entity.views.DistinctInformation;
 import com.szw.commonweal.entity.views.GetVolunteers;
 import com.szw.commonweal.service.ManagerService;
 import com.szw.commonweal.utils.Base64;
@@ -19,6 +21,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+
+import javax.servlet.http.HttpServletRequest;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -93,9 +100,36 @@ public class ManagerServiceImpl implements ManagerService {
      * 管理员发布志愿活动
      * */
     @Override
-    public ResultInfo<String> publishActivity(AdminPublishActivity activity) {
+    public ResultInfo<String> publishProject(HttpServletRequest request) {
+        Project project = new Project();
+        String startDate = request.getParameter("startDate");
+        String finishDate = request.getParameter("finishDate");
+        SimpleDateFormat ft = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date date1 = null;
+        Date date2 = null;
+        try {
+            date1 = ft.parse(startDate);
+            date2 = ft.parse(finishDate);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        java.sql.Date sql_date1 = new java.sql.Date(date1.getTime());
+        java.sql.Date sql_date2 = new java.sql.Date(date2.getTime());
+
+        project.setStartDate(sql_date1);
+        project.setFinishDate(sql_date2);
+        project.setContact(request.getParameter("contact"));
+        project.setEmail(request.getParameter("email"));
+        project.setAdminId(request.getParameter("adminId"));
+        project.setRemaining(Integer.valueOf(request.getParameter("remaining")));
+        project.setTitle(request.getParameter("title"));
+        project.setImageUrl(request.getParameter("imageUrl"));
+        project.setTelephone(request.getParameter("telephone"));
+        project.setContent(request.getParameter("content"));
+        project.setPeopleNum(Integer.valueOf(request.getParameter("peopleNum")));
+        project.setType(request.getParameter("type"));
         ResultInfo<String> res = new ResultInfo<>();
-        int i = projectMapper.insert(activity);
+        int i = projectMapper.insert(project);
         System.out.println("插入结果"+i);
         if (i==1){
             res.setCode(200);
@@ -215,9 +249,9 @@ public class ManagerServiceImpl implements ManagerService {
     @Override
     public ResultInfo<String> changEmail(String adminName, String email) {
         ResultInfo<String> res = new ResultInfo<>();
-        QueryWrapper<EmailAndTelephone> distinct = new QueryWrapper<>();
+        QueryWrapper<DistinctInformation> distinct = new QueryWrapper<>();
         distinct.select("email").eq("email",email);
-        List<EmailAndTelephone> list = distinctMapper.selectList(distinct);
+        List<DistinctInformation> list = distinctMapper.selectList(distinct);
         if (!list.isEmpty()){
             res.setStatus(ResultInfo.FAIL);
             res.setData("邮箱已经存在");
@@ -245,9 +279,9 @@ public class ManagerServiceImpl implements ManagerService {
     @Transactional
     public ResultInfo<String> changTelephone(String adminName, String telephone) {
         ResultInfo<String> res = new ResultInfo<>();
-        QueryWrapper<EmailAndTelephone> wrapper1 = new QueryWrapper<>();
+        QueryWrapper<DistinctInformation> wrapper1 = new QueryWrapper<>();
         wrapper1.select("telephone").eq("telephone",telephone);
-        List<EmailAndTelephone> list = distinctMapper.selectList(wrapper1);
+        List<DistinctInformation> list = distinctMapper.selectList(wrapper1);
         if (!list.isEmpty()){
             res.setStatus(ResultInfo.FAIL);
             res.setData("该手机号已经注册");

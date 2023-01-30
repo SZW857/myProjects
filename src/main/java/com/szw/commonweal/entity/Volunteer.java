@@ -16,9 +16,9 @@ public class Volunteer implements Serializable{
     private String userId;
     private String passwd;
     private String address;
-    private int age;
-    private int verifyStatus;
-    private int signNum;
+    private Integer age;
+    private Integer verifyStatus;
+    private Integer signNum;
     private String idCard;
     private String sex;
     private String telephone;

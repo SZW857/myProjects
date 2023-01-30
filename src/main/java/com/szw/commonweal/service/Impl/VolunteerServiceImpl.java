@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.szw.commonweal.dao.DistinctMapper;
 import com.szw.commonweal.dao.VolunteerMapper;
-import com.szw.commonweal.entity.views.EmailAndTelephone;
+import com.szw.commonweal.entity.views.DistinctInformation;
 import com.szw.commonweal.entity.ResultInfo;
 import com.szw.commonweal.entity.Volunteer;
 import com.szw.commonweal.service.VolunteerService;
@@ -38,9 +38,9 @@ public class VolunteerServiceImpl  implements VolunteerService {
     @Override
     public ResultInfo<String> emailCheck(String email) {
         ResultInfo<String> res = new ResultInfo<>();
-        QueryWrapper<EmailAndTelephone> wrapper = new QueryWrapper<>();
+        QueryWrapper<DistinctInformation> wrapper = new QueryWrapper<>();
         wrapper.select("email").eq("email",email);
-        List<EmailAndTelephone> list = distinctMapper.selectList(wrapper);
+        List<DistinctInformation> list = distinctMapper.selectList(wrapper);
         System.out.println("集合为："+list);
         System.out.println("用户名本次的参数：："+email);
         if (!list.isEmpty()){
@@ -80,9 +80,9 @@ public class VolunteerServiceImpl  implements VolunteerService {
     @Override
     public ResultInfo<String> idCheck(String idCard) {
         ResultInfo<String> res = new ResultInfo<>();
-        QueryWrapper<EmailAndTelephone> wrapper = new QueryWrapper<>();
+        QueryWrapper<DistinctInformation> wrapper = new QueryWrapper<>();
         wrapper.select("id_card").eq("id_card",idCard);
-        List<EmailAndTelephone> list = distinctMapper.selectList(wrapper);
+        List<DistinctInformation> list = distinctMapper.selectList(wrapper);
         System.out.println("集合为："+list);
         System.out.println("本次的参数：："+idCard);
         if (!list.isEmpty()){
@@ -101,9 +101,9 @@ public class VolunteerServiceImpl  implements VolunteerService {
     @Override
     public ResultInfo<String> telephoneCheck(String telephoneNum) {
         ResultInfo<String> res = new ResultInfo<>();
-        QueryWrapper<EmailAndTelephone> wrapper = new QueryWrapper<>();
+        QueryWrapper<DistinctInformation> wrapper = new QueryWrapper<>();
         wrapper.select("telephone").eq("telephone",telephoneNum);
-        List<EmailAndTelephone> list = distinctMapper.selectList(wrapper);
+        List<DistinctInformation> list = distinctMapper.selectList(wrapper);
         System.out.println("集合为："+list);
         System.out.println("本次的参数：："+telephoneNum);
         if (!list.isEmpty()){
@@ -157,9 +157,9 @@ public class VolunteerServiceImpl  implements VolunteerService {
     @Override
     public ResultInfo<String> changEmail(String userId, String email) {
         ResultInfo<String> res = new ResultInfo<>();
-        QueryWrapper<EmailAndTelephone> distinct = new QueryWrapper<>();
+        QueryWrapper<DistinctInformation> distinct = new QueryWrapper<>();
         distinct.select("email").eq("email",email);
-        List<EmailAndTelephone> list = distinctMapper.selectList(distinct);
+        List<DistinctInformation> list = distinctMapper.selectList(distinct);
         if (!list.isEmpty()){
             res.setStatus(ResultInfo.FAIL);
             res.setData("邮箱已经存在");
@@ -205,9 +205,9 @@ public class VolunteerServiceImpl  implements VolunteerService {
     @Transactional
     public ResultInfo<String> changTelephone(String userId, String telephone) {
         ResultInfo<String> res = new ResultInfo<>();
-        QueryWrapper<EmailAndTelephone> wrapper1 = new QueryWrapper<>();
+        QueryWrapper<DistinctInformation> wrapper1 = new QueryWrapper<>();
         wrapper1.select("telephone").eq("telephone",telephone);
-        List<EmailAndTelephone> list = distinctMapper.selectList(wrapper1);
+        List<DistinctInformation> list = distinctMapper.selectList(wrapper1);
         if (!list.isEmpty()){
             res.setStatus(ResultInfo.FAIL);
             res.setData("该手机号已经注册");

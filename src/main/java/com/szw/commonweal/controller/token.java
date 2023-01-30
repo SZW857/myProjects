@@ -1,10 +1,6 @@
 package com.szw.commonweal.controller;
 import com.szw.commonweal.entity.ResultInfo;
-import com.szw.commonweal.entity.User;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-
-import javax.servlet.http.HttpServletRequest;
 
 @RestController
 public class token {

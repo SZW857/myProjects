@@ -24,7 +24,7 @@ public class LoginInterceptor implements HandlerInterceptor {
             String token=request.getParameter("token");
             String email=request.getParameter("email");
             System.out.println("史泽文token为"+token);
-            System.out.println("史泽文的email为"+email);
+
 
             Map<String, String> map = JwtUtils.verify(token);
             String value = map.get("msg");

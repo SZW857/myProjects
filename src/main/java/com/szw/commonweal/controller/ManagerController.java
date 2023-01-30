@@ -1,11 +1,12 @@
 package com.szw.commonweal.controller;
 
 
+import com.szw.commonweal.entity.Project;
 import com.szw.commonweal.entity.ResultInfo;
-import com.szw.commonweal.entity.views.AdminPublishActivity;
+
 import com.szw.commonweal.service.ManagerService;
 import com.szw.commonweal.service.NewsInfoService;
-import com.szw.commonweal.utils.Base64;
+
 import com.szw.commonweal.utils.UploadUtil;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -180,8 +181,8 @@ public class ManagerController {
      * */
     @CrossOrigin
     @RequestMapping("/publishActive")
-    public ResultInfo<String> publishActive(AdminPublishActivity adminPublishActivity){
-        return managerService.publishActivity(adminPublishActivity);
+    public ResultInfo<String> publishActive(HttpServletRequest request){
+        return managerService.publishProject(request);
     }
 
     /**
