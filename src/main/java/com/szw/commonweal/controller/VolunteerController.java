@@ -2,6 +2,7 @@ package com.szw.commonweal.controller;
 
 import com.szw.commonweal.entity.ResultInfo;
 import com.szw.commonweal.entity.Volunteer;
+import com.szw.commonweal.entity.views.EnrollResult;
 import com.szw.commonweal.service.VolunteerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -140,6 +141,16 @@ public class VolunteerController {
                                               @RequestParam("sex")String sex,
                                               @RequestParam("age") int age){
         return volunteerService.saveInformation(userId,address,sex,age);
+    }
+
+    /**
+     * 获取报名结果集
+     * */
+    @CrossOrigin
+    @ResponseBody
+    @RequestMapping("/getEnrollResult")
+    public List<EnrollResult> backResult(@RequestParam("userId")String userId){
+        return volunteerService.enrollResult(userId);
     }
 
 }

@@ -7,6 +7,7 @@ import com.szw.commonweal.dao.VolunteerMapper;
 import com.szw.commonweal.entity.views.DistinctInformation;
 import com.szw.commonweal.entity.ResultInfo;
 import com.szw.commonweal.entity.Volunteer;
+import com.szw.commonweal.entity.views.EnrollResult;
 import com.szw.commonweal.service.VolunteerService;
 import com.szw.commonweal.utils.Base64;
 import com.szw.commonweal.utils.EphemeralCode;
@@ -295,6 +296,15 @@ public class VolunteerServiceImpl  implements VolunteerService {
             res.setData("注册失败");
         }
         return res;
+    }
+
+    /**
+     * 获取报名结果集
+     * */
+    @Override
+    public List<EnrollResult> enrollResult(String userId) {
+        List<EnrollResult> list = volunteerMapper.getResult(userId);
+        return list;
     }
 
     /**

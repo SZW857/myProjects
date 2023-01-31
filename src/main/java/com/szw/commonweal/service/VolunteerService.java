@@ -1,6 +1,7 @@
 package com.szw.commonweal.service;
 import com.szw.commonweal.entity.ResultInfo;
 import com.szw.commonweal.entity.Volunteer;
+import com.szw.commonweal.entity.views.EnrollResult;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
@@ -70,6 +71,11 @@ public interface VolunteerService {
      * 个人页面展示*
      * */
     public List PersonInfo(String userId);
+
+    /**
+     * 志愿者报名结果
+     * */
+    public List<EnrollResult> enrollResult(String userId);
 
 }
 

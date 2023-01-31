@@ -6,10 +6,16 @@ import com.sun.deploy.security.ruleset.RuleSetParser;
 import com.szw.commonweal.dao.DistinctMapper;
 
 import com.szw.commonweal.dao.RankMapper;
+import com.szw.commonweal.dao.VolunteerMapper;
+import com.szw.commonweal.entity.Volunteer;
+import com.szw.commonweal.entity.views.EnrollResult;
 import com.szw.commonweal.entity.views.RankVolunteers;
+import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Select;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.stereotype.Repository;
 
 import javax.print.DocFlavor;
 import java.sql.Timestamp;
@@ -19,6 +25,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 
@@ -28,6 +35,8 @@ class CommonWealApplicationTests {
     private RankMapper rankMapper;
    @Autowired
    private DistinctMapper newsMapper;
+   @Autowired
+   private VolunteerMapper volunteer;
     public static final  String ALI_DOMAIN = "https://shizewenlyz.oss-cn-hongkong.aliyuncs.com/";
    @Test
    public void test() throws ParseException {
@@ -40,28 +49,10 @@ class CommonWealApplicationTests {
 //        dateToStamp(time1);
    }
     @Test
+    @Mapper
     public  void dateToStamp() throws ParseException {
-    String x="2023-01-30 22:28:00";
 
-        String A = x.substring(11).substring(0,2);
-        int i = Integer.parseInt(A);
-        if (i<23){
-            //
-            System.out.println(1111111);
-        }else {
-            //23:00
-            //>23:00
-            System.out.println(2222222);
-        }
-//        String v = x.substring(11,9);
-        System.out.println(A);
-//        String ZERO = ":00";
-//        String THIRTY = ":30";
-//        String PRE = A + THIRTY + ZERO;
-//        System.out.println("后置"+PRE);
-
-
-//
+//       volunteer.aaa("szw").forEach(System.out::println);
     }
 
 
