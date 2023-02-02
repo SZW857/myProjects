@@ -20,4 +20,9 @@ public interface AttendanceService {
      * */
     public ResultInfo<String> checkConflict(String userId,Long startDate, Long finishDate);
 
+    /**
+     * 志愿者签到
+     * */
+    public ResultInfo<String> signIn(String userId,int serialNum ,String voucher,String content);
+
 }

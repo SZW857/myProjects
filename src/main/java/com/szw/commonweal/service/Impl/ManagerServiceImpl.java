@@ -2,21 +2,19 @@ package com.szw.commonweal.service.Impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
-import com.szw.commonweal.dao.DistinctMapper;
-import com.szw.commonweal.dao.GetVolunteerMapper;
-import com.szw.commonweal.dao.MangerMapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.szw.commonweal.dao.*;
 
-import com.szw.commonweal.dao.ProjectMapper;
-import com.szw.commonweal.entity.Manager;
-import com.szw.commonweal.entity.Project;
-import com.szw.commonweal.entity.ResultInfo;
+import com.szw.commonweal.entity.*;
 
 import com.szw.commonweal.entity.views.DistinctInformation;
+import com.szw.commonweal.entity.views.GetSignIn;
 import com.szw.commonweal.entity.views.GetVolunteers;
 import com.szw.commonweal.service.ManagerService;
 import com.szw.commonweal.utils.Base64;
 import com.szw.commonweal.utils.JwtUtils;
 import com.szw.commonweal.utils.UploadUtil;
+import lombok.Synchronized;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -45,6 +43,14 @@ public class ManagerServiceImpl implements ManagerService {
     private DistinctMapper distinctMapper;
     @Autowired
     private ProjectMapper projectMapper;
+    @Autowired
+    private GetSignInMapper getSignInMapper;
+    @Autowired
+    private VolunteerMapper volunteerMapper;
+    @Autowired
+    private AttendanceMapper attendanceMapper;
+    @Autowired
+    private HelpMapper helpMapper;
 
 
     /**
@@ -92,6 +98,100 @@ public class ManagerServiceImpl implements ManagerService {
             res.setStatus(ResultInfo.SUCCESS);
         }else{
             res.setStatus(ResultInfo.FAIL);
+        }
+        return res;
+    }
+
+    /**
+     * 通过志愿者的求助审核并发布
+     * */
+    @Override
+    @Transactional
+    @Synchronized
+    public ResultInfo<Object> passedVolunteerHelpInfo(HttpServletRequest request) {
+        ResultInfo<Object> res = new ResultInfo<>();
+        QueryWrapper<Help> wrapper = new QueryWrapper<>();
+        wrapper.eq("help_num",request.getParameter("helpNum"));
+        int i = helpMapper.delete(wrapper);
+        if (i==1){
+            ResultInfo<String> resultInfo = publishProject(request);
+            if (resultInfo.getCode()==200){
+                res.setStatus(ResultInfo.SUCCESS);
+                res.setData("审核通过,求助信息发布成功");
+            }else {
+                res.setData("求助信息发布失败");
+            }
+        }
+
+        return res;
+    }
+
+    /**
+     * 获取志愿者求助信息
+     * */
+    @Override
+    public ResultInfo<Object> getVolunteerHelpInformation() {
+        ResultInfo<Object> res = new ResultInfo<>();
+        QueryWrapper<Help> wrapper = new QueryWrapper<>();
+        List<Help> list = helpMapper.selectList(wrapper);
+        if (!list.isEmpty()){
+            res.setData(list);
+            res.setStatus(ResultInfo.SUCCESS);
+        }else {
+            res.setStatus(ResultInfo.FAIL);
+        }
+        return res;
+    }
+
+    /**
+     * 通过志愿者的签到审核
+     * */
+    @Override
+    @Transactional
+    @Synchronized
+    public ResultInfo<String> passedVolunteerSignIn(String userId, Long serialNum) {
+        ResultInfo<String> res = new ResultInfo<>();
+        UpdateWrapper<Attendance> wrapper = new UpdateWrapper<>();
+        UpdateWrapper<Volunteer> wrapper1 = new UpdateWrapper<>();
+        wrapper.set("status",1).eq("user_id",userId).eq("serial_num",serialNum);
+        int i = attendanceMapper.update(null, wrapper);
+        if (i==1){
+            int update = volunteerMapper.passedVolunteer(userId);
+            if (update==1){
+                res.setStatus(ResultInfo.SUCCESS);
+                res.setData("通过了签到,签到数+1,状态改为1");
+            }else {
+                res.setStatus(ResultInfo.FAIL);
+                res.setData("状态修改成功但签到失败数据库崩溃");
+            }
+            return res;
+        }else {
+            res.setStatus(ResultInfo.FAIL);
+
+            return null;
+        }
+    }
+
+    /**
+     *分页获取志愿者签到申请
+     * */
+    @Override
+    public ResultInfo<Object> getSignInItems(int currentPage, int pageSize) {
+        QueryWrapper<GetSignIn> wrapper = new QueryWrapper<>();
+        wrapper.select("*").eq("status",0);
+        ResultInfo<Object> res = new ResultInfo<>();
+        Page<GetSignIn> page = new Page<>(currentPage,pageSize);
+        Page<GetSignIn> mapsPage = getSignInMapper.selectPage(page, wrapper);
+        long total = mapsPage.getTotal();
+        List<GetSignIn> list = mapsPage.getRecords();
+        System.out.println("实体类数据"+list);
+        if (!list.isEmpty()){
+            res.setData(list);
+            res.setTotal(total);
+            res.setStatus(ResultInfo.SUCCESS);
+            res.setCode(200);
+        }else {
+            res.setData("获取志愿者签到信息失败");
         }
         return res;
     }
@@ -420,6 +520,9 @@ public class ManagerServiceImpl implements ManagerService {
             return res;
         }
     }
+
+
+
 }
 
 

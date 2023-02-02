@@ -7,6 +7,7 @@ import com.szw.commonweal.entity.Attendance;
 import com.szw.commonweal.entity.ResultInfo;
 import com.szw.commonweal.service.AttendanceService;
 import com.szw.commonweal.utils.DateFormat;
+import lombok.Synchronized;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,6 +26,8 @@ public class AttendanceServiceImpl implements AttendanceService {
     /**
      * 志愿者报名参加活动
      * */
+    @Transactional
+    @Synchronized
     @Override
     public ResultInfo<Object> attendant(Attendance attendance) {
         ResultInfo<Object> res = new ResultInfo<>();
@@ -71,6 +74,24 @@ public class AttendanceServiceImpl implements AttendanceService {
             }
             return res;
         }
+    }
+
+    /**
+     * 志愿者签到
+     * */
+    @Override
+    public ResultInfo<String> signIn(String voucher, int serialNum, String userId,String content) {
+        ResultInfo<String> res = new ResultInfo<>();
+        int i = attendanceMapper.signIN(voucher, serialNum, userId,content);
+        System.out.println("service的结果i"+i);
+        if (i==1){
+            res.setData("签到成功");
+            res.setStatus(ResultInfo.SUCCESS);
+        }else {
+            res.setData("签到失败");
+            res.setStatus(ResultInfo.FAIL);
+        }
+            return res;
     }
 
     /**

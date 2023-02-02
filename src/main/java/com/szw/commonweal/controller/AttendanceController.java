@@ -42,5 +42,14 @@ public class AttendanceController {
 
     }
 
+    /**
+     * 志愿者签到
+     * */
+    @CrossOrigin
+    @RequestMapping("/signIn")
+    public ResultInfo<String> signIn(@RequestParam("voucher")String voucher,@RequestParam("serialNum")int serialNum,
+                                     @RequestParam("userId")String userId,@RequestParam("content") String content){
+        return attendanceService.signIn(voucher,serialNum,userId,content);
+    }
 
 }

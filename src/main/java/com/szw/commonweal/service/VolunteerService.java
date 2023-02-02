@@ -77,6 +77,11 @@ public interface VolunteerService {
      * */
     public List<EnrollResult> enrollResult(String userId);
 
+    /**
+     * 个人退选志愿活动
+     * */
+    public ResultInfo<String> optOut(String userId,String serialNum);
+
 }
 
 

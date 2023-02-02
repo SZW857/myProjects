@@ -195,6 +195,17 @@ public class ManagerController {
     }
 
     /**
+     *分页获取志愿者签到申请
+     * */
+    @CrossOrigin
+    @ResponseBody
+    @RequestMapping("/getSignInVolunteer/{currentPage}/{pageSize}")
+    public ResultInfo<Object> getSignVolunteers(@PathVariable("currentPage")int currentPage,
+                                                @PathVariable("pageSize")int pageSize){
+        return managerService.getSignInItems(currentPage,pageSize);
+    }
+
+    /**
      * 用于删除志愿活动的接口 (DONE)
      * */
     @ResponseBody
@@ -202,6 +213,39 @@ public class ManagerController {
     public String measure(@RequestParam("path") String path) throws IOException{
         return UploadUtil.DeleteImage(path);
     }
+
+    /**
+     * 通过志愿者的签到审核
+     * */
+    @CrossOrigin
+    @ResponseBody
+    @RequestMapping("/passVolunteersSignIn")
+    public ResultInfo<String> passVolunteersSignIn(@RequestParam("userId")String userId,
+                                                   @RequestParam("serialNum")Long serialNum){
+        return managerService.passedVolunteerSignIn(userId,serialNum);
+    }
+
+    /**
+     * 获取全部志愿者的求助信息
+     * */
+    @CrossOrigin
+    @ResponseBody
+    @RequestMapping("/getAllVolunteerHelpInfo")
+    public ResultInfo<Object> getAllVolunteerHelpInfo(){
+        return managerService.getVolunteerHelpInformation();
+    }
+
+    /**
+     * 通过志愿者的求助审核并发布
+     * */
+    @CrossOrigin
+    @ResponseBody
+    @RequestMapping("/passAllVolunteerHelpInfo")
+    public ResultInfo<Object> passAllVolunteerHelpInfo(HttpServletRequest request){
+        return managerService.passedVolunteerHelpInfo(request);
+    }
+
+
 
 
 }

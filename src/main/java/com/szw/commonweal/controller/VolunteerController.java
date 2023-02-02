@@ -1,8 +1,10 @@
 package com.szw.commonweal.controller;
 
+import com.szw.commonweal.entity.Help;
 import com.szw.commonweal.entity.ResultInfo;
 import com.szw.commonweal.entity.Volunteer;
 import com.szw.commonweal.entity.views.EnrollResult;
+import com.szw.commonweal.service.HelpService;
 import com.szw.commonweal.service.VolunteerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -18,6 +20,8 @@ import java.util.List;
 public class VolunteerController {
     @Autowired
     private VolunteerService volunteerService;
+    @Autowired
+    private HelpService helpService;
 
     /**
      * 用户身份证号检测 (DONE)
@@ -153,6 +157,25 @@ public class VolunteerController {
         return volunteerService.enrollResult(userId);
     }
 
+    /**
+     *志愿者退选活动
+     * */
+    @CrossOrigin
+    @RequestMapping("/deleteOpt")
+    @ResponseBody
+    public ResultInfo<String> optOut(@RequestParam("userId") String userId,@RequestParam("serialNum") String serialNum){
+       return volunteerService.optOut(userId,serialNum);
+    }
+
+    /**
+     * 志愿者提交求助信息
+     * */
+    @CrossOrigin
+    @RequestMapping("/postHelpInformation")
+    @ResponseBody
+    public ResultInfo<String> postHelpActivity(HttpServletRequest request){
+       return helpService.postHelpInfo(request);
+    }
 }
 
 

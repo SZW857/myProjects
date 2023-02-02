@@ -42,7 +42,7 @@ public interface ManagerService {
     /**
      * 管理员个人页面展示(DONE)*
      *
-     * @return*/
+     * */
     public List<Map<String, Object>> getOneManagerInfo(String userId);
 
     /**
@@ -94,5 +94,25 @@ public interface ManagerService {
      * 管理员发布志愿活动
      * */
     public ResultInfo<String> publishProject(HttpServletRequest project);
+
+    /**
+     *分页获取志愿者签到申请
+     * */
+    public ResultInfo<Object> getSignInItems(int currentPage,int pageSize);
+
+    /**
+     * 通过志愿者的签到审核
+     * */
+    public ResultInfo<String> passedVolunteerSignIn(String userId,Long serialNum);
+
+    /**
+     * 获取志愿者求助信息
+     * */
+     public ResultInfo<Object> getVolunteerHelpInformation();
+
+    /**
+     * 通过志愿者的求助审核并发布
+     * */
+    public ResultInfo<Object> passedVolunteerHelpInfo(HttpServletRequest request);
 
 }

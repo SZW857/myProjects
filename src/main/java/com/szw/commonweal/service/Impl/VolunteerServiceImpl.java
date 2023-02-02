@@ -2,8 +2,13 @@ package com.szw.commonweal.service.Impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.szw.commonweal.dao.AttendanceMapper;
 import com.szw.commonweal.dao.DistinctMapper;
+import com.szw.commonweal.dao.ProjectMapper;
 import com.szw.commonweal.dao.VolunteerMapper;
+import com.szw.commonweal.entity.Attendance;
+import com.szw.commonweal.entity.Project;
 import com.szw.commonweal.entity.views.DistinctInformation;
 import com.szw.commonweal.entity.ResultInfo;
 import com.szw.commonweal.entity.Volunteer;
@@ -12,6 +17,7 @@ import com.szw.commonweal.service.VolunteerService;
 import com.szw.commonweal.utils.Base64;
 import com.szw.commonweal.utils.EphemeralCode;
 import com.szw.commonweal.utils.JwtUtils;
+import lombok.Synchronized;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,8 +36,10 @@ public class VolunteerServiceImpl  implements VolunteerService {
     private VolunteerMapper volunteerMapper;
     @Autowired
     private DistinctMapper distinctMapper;
-
-
+    @Autowired
+    private AttendanceMapper attendanceMapper;
+    @Autowired
+    private ProjectMapper projectMapper;
 
     /**
      * 用户Email检测(DONE)
@@ -299,6 +307,33 @@ public class VolunteerServiceImpl  implements VolunteerService {
     }
 
     /**
+     * 个人退选志愿活动
+     * */
+    @Override
+    @Transactional
+    @Synchronized
+    public ResultInfo<String> optOut(String userId, String serialNum) {
+        ResultInfo<String> res = new ResultInfo<>();
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("user_id",userId);
+        map.put("serial_num",serialNum);
+        int i = attendanceMapper.deleteByMap(map);
+        if (i==1){
+            int optOut = projectMapper.optOut(serialNum);
+            if (optOut==1){
+                res.setStatus(ResultInfo.SUCCESS);
+            }else {
+                res.setStatus(ResultInfo.FAIL);
+                res.setData("事务提交失败");
+            }
+        }else {
+            res.setStatus(ResultInfo.FAIL);
+            res.setData("删除活动失败");
+        }
+        return res;
+    }
+
+    /**
      * 获取报名结果集
      * */
     @Override
@@ -306,6 +341,29 @@ public class VolunteerServiceImpl  implements VolunteerService {
         List<EnrollResult> list = volunteerMapper.getResult(userId);
         return list;
     }
+
+//    分页?有时间:无时间
+//    public ResultInfo<Object> getActiveItems(int currentPage,int pageSize) {
+//        ResultInfo<Object> res = new ResultInfo<>();
+//        QueryWrapper<EnrollResult> wrapper = new QueryWrapper<>();
+//        wrapper.select("*").eq("status",0).eq("user_id",userId);
+//        Page<Project> page = new Page<>(currentPage,pageSize);
+//        Page<Project> mapsPage = volunteerMapper.selectPage(page, wrapper);
+//        long total = mapsPage.getTotal();
+//        List<Project> list = mapsPage.getRecords();
+//        if (!list.isEmpty()){
+//            res.setData(list);
+//            res.setTotal(total);
+//            res.setStatus(ResultInfo.SUCCESS);
+//            res.setCode(200);
+//        }else {
+//            res.setData("获取志愿项目失败");
+//        }
+//        return res;
+//    }
+
+
+
 
     /**
      * 个人页面展示*(DONE)

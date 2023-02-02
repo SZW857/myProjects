@@ -15,7 +15,8 @@ import org.springframework.stereotype.Repository;
 public interface ProjectMapper extends BaseMapper<Project> {
     @Update("update project set remaining =remaining-1 where serial_num = #{serialNum}")
     int remaining(String serialNum);
-
+    @Update("update project set remaining =remaining+1 where serial_num = #{serialNum}")
+    int optOut(String serialNum);
 
 
 }
