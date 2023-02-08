@@ -12,7 +12,7 @@ import java.io.Serializable;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Volunteer implements Serializable{
-    @TableId(type = IdType.NONE)//指定主键使用数据库ID自增策略
+    @TableId(type = IdType.NONE)
     private String userId;
     private String passwd;
     private String address;

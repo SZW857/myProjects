@@ -13,6 +13,7 @@ import com.szw.commonweal.entity.views.DistinctInformation;
 import com.szw.commonweal.entity.ResultInfo;
 import com.szw.commonweal.entity.Volunteer;
 import com.szw.commonweal.entity.views.EnrollResult;
+import com.szw.commonweal.entity.views.GetVolunteers;
 import com.szw.commonweal.service.VolunteerService;
 import com.szw.commonweal.utils.Base64;
 import com.szw.commonweal.utils.EphemeralCode;
@@ -305,6 +306,8 @@ public class VolunteerServiceImpl  implements VolunteerService {
         }
         return res;
     }
+
+
 
     /**
      * 个人退选志愿活动

@@ -2,6 +2,7 @@ package com.szw.commonweal.service;
 import com.szw.commonweal.entity.ResultInfo;
 import com.szw.commonweal.entity.Volunteer;
 import com.szw.commonweal.entity.views.EnrollResult;
+import com.szw.commonweal.entity.views.GetVolunteers;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
@@ -81,6 +82,8 @@ public interface VolunteerService {
      * 个人退选志愿活动
      * */
     public ResultInfo<String> optOut(String userId,String serialNum);
+
+
 
 }
 

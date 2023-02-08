@@ -72,6 +72,9 @@ public class LoginInterceptor implements HandlerInterceptor {
 //=======================================发送接口========================================================================
                 request.getRequestURI().equals("/sendMessage")||                            //发送短信
                 request.getRequestURI().equals("/sendEmail")||                              //发送邮件
+//=======================================首页===========================================================================
+                request.getRequestURI().equals("/index/getAllUsers")||                       //获取全部的注册人数
+                request.getRequestURI().equals("/index/getPassUsers")||                      //获取已经通过的用户数
 //=======================================社区新闻========================================================================
                 request.getRequestURI().equals("/admin/selectAdminInfo")||                  //获取管理员
                 request.getRequestURI().equals("/admin/getNewsInfo")||                      //获取社区新闻
@@ -80,8 +83,13 @@ public class LoginInterceptor implements HandlerInterceptor {
 //=======================================获取志愿活动信息==================================================================
                 request.getRequestURI().contains("/project/getProjectInformation")||        //获取志愿活动信息
                 request.getRequestURI().equals("/project/getDetailPage")||                  //加载取活动详情页
+//=======================================获取评论========================================================================
+                request.getRequestURI().equals("/remark/getParentContent")||                //获取所有父级评论
+                request.getRequestURI().equals("/reply/getSpecificContent")||               //获取指定的子级评论
 //=======================================测试接口========================================================================
                 request.getRequestURI().contains("/measure");                          //测试接口
+
+
     }
 
     //拦截的路径
