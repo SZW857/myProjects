@@ -37,7 +37,7 @@ public class RemarkServiceImpl implements RemarkService {
             QueryWrapper<Reply> wrapper1 = new QueryWrapper<>();
             wrapper1.select("remark_num").eq("remark_num",remarkNum);
              i1 = replyMapper.delete(wrapper1);
-            if (i1==1){
+            if (i1==1||i1==0){
                 wrapper.select("remark_num").eq("remark_num",remarkNum);
                  i = remarkMapper.delete(wrapper);
                 if (i==1){

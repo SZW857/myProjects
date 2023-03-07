@@ -1,0 +1,38 @@
+server:
+  port: 8083
+spring:
+  mail:
+    username: 1448602918@qq.com
+    password: hbfdavelmtgrhebf
+    host: smtp.qq.com
+    properties:
+      mail:
+        smtp:
+          ssl:
+            enable: true
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://127.0.0.1:3306/commonweal?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai
+    username: root
+    password: 123456
+
+
+
+
+
+#配置日志  打印sql语句
+# OSS相关配置信息 （OSS官网配置信息）
+#aliyun:
+#  oss:
+#    endpoint: http://oss-cn-hongkong.aliyuncs.com # oss对外服务的访问域名
+##    url: https://**.oss-cn-hangzhou.aliyuncs.com/
+#    accessKeyId: LTAI5tS1KcnxDx41HznSD5ok # 访问身份验证中用到用户标识
+#    accessKeySecret: vPBssJ8lmrwE0sAQePe75UTJ5YbppE # 用户用于加密签名字符串和oss用来验证签名字符串的密钥
+#    bucketName: shizewenlyz
+
+
+# 配置打印sql语句
+mybatis-plus:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
